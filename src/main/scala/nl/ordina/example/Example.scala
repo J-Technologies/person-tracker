@@ -3,12 +3,12 @@ package nl.ordina.example
 import java.io.File
 import java.util.UUID
 
-import nl.ordina.example.Domain.{CreateToDoItemCommand, MarkCompletedCommand, ToDoEventHandler, ToDoItem}
+import nl.ordina.commands.{CreateToDoItemCommand, MarkCompletedCommand}
+import nl.ordina.example.Domain.ToDoItem
 import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
 import org.axonframework.eventhandling.SimpleEventBus
-import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter
 import org.axonframework.eventsourcing.EventSourcingRepository
 import org.axonframework.eventstore.fs.{FileSystemEventStore, SimpleEventFileResolver}
 
@@ -19,10 +19,7 @@ object Example {
     val commandGateway = new DefaultCommandGateway(commandBus)
 
     val eventStore = new FileSystemEventStore(new SimpleEventFileResolver(new File("./events")))
-
     val eventBus = new SimpleEventBus()
-
-    AnnotationEventListenerAdapter.subscribe(new ToDoEventHandler(), eventBus)
 
     val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], eventStore)
     repo.setEventBus(eventBus)
