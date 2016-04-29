@@ -1,8 +1,10 @@
 package nl.ordina
 
-class MainApp {
+import nl.ordina.example.Example
+
+object MainApp {
 
   def main(args: Array[String]) {
-    print("this is the person tracker")
+    Example.run()
   }
 }
