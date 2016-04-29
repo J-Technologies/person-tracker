@@ -1,3 +1,5 @@
+package nl.ordina
+
 import nl.ordina.commands.{CreateToDoItemCommand, MarkCompletedCommand}
 import nl.ordina.events.{ToDoItemCompletedEvent, ToDoItemCreatedEvent}
 import nl.ordina.example.Domain.ToDoItem
