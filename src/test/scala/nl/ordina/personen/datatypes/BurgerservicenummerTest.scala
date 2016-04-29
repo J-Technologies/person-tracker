@@ -2,10 +2,6 @@ package nl.ordina.personen.datatypes
 
 import org.scalatest.{FunSuite, Matchers}
 
-/**
-  * @author Eric Malotaux
-  * @date 4/29/16.
-  */
 class BurgerservicenummerTest extends FunSuite with Matchers {
 
   test("burgerservicenummer voldoet aan elfproef") {
