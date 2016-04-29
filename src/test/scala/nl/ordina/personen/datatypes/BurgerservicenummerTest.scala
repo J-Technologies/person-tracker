@@ -32,17 +32,17 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
   }
 
   test("ongeldige burgerservicenummers als integer") {
-    geldigeNummers.map(n => (n.toInt + 7)).foreach { n =>
+    geldigeNummers.map(n => n.toInt + 7).foreach { n =>
       the[AssertionError] thrownBy Burgerservicenummer(n) should have message s"assertion failed: $n is geen geldig burgerservicenummer"
     }
   }
 
   test("te kort burgerservicenummer") {
-    the[AssertionError] thrownBy Burgerservicenummer("123") should have message "assertion failed: Een burgerservicenummer heeft negen cijfers"
+    the[AssertionError] thrownBy Burgerservicenummer("123") should have message "assertion failed: Een burgerservicenummer heeft negen cijfers; 123 heeft er 3"
   }
 
   test("te lang burgerservicenummer") {
-    the[AssertionError] thrownBy Burgerservicenummer("1234567890") should have message "assertion failed: Een burgerservicenummer heeft negen cijfers"
+    the[AssertionError] thrownBy Burgerservicenummer("1234567890") should have message "assertion failed: Een burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
   }
 
   test("te kort burgerservicenummer als integer") {
@@ -50,6 +50,6 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
   }
 
   test("te lang burgerservicenummer als integer") {
-    the[AssertionError] thrownBy Burgerservicenummer(1234567890) should have message "assertion failed: Een burgerservicenummer heeft negen cijfers"
+    the[AssertionError] thrownBy Burgerservicenummer(1234567890) should have message "assertion failed: Een burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
   }
 }
