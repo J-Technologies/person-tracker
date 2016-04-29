@@ -14,7 +14,7 @@ import org.axonframework.eventstore.fs.{FileSystemEventStore, SimpleEventFileRes
 
 object Example {
 
-  def run() = {
+  def main(args: Array[String]) {
     val commandBus = new SimpleCommandBus()
     val commandGateway = new DefaultCommandGateway(commandBus)
 
@@ -30,5 +30,4 @@ object Example {
     commandGateway.send(new CreateToDoItemCommand(itemId, "Need to do this"))
     commandGateway.send(new MarkCompletedCommand(itemId))
   }
-
 }

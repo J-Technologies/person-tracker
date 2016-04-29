@@ -6,11 +6,11 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
 
   test("burgerservicenummer voldoet aan elfproef") {
     val bsn = new Burgerservicenummer("064293464")
-    bsn.toString shouldBe "064293464"
+    bsn.value shouldBe "064293464"
   }
 
   test("burgerservicenummer voldoet ook aan de elfproef") {
-    new Burgerservicenummer("380101968").toString shouldBe "380101968"
+    new Burgerservicenummer("380101968").value shouldBe "380101968"
   }
 
   test("burgerservicenummer voldoet *ook niet* aan elfproef") {

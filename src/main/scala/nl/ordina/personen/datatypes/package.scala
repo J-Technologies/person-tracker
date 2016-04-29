@@ -20,7 +20,5 @@ package object datatypes {
         .map { case (cijfer, index) => (9 - index) * cijfer }
         .sum - cijfers(8)
       ) % 11 == 0
-
-    override def toString: String = value
   }
 }
