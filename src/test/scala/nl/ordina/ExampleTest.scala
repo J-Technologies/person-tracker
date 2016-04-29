@@ -2,7 +2,7 @@ package nl.ordina
 
 import nl.ordina.commands.{CreateToDoItemCommand, MarkCompletedCommand}
 import nl.ordina.events.{ToDoItemCompletedEvent, ToDoItemCreatedEvent}
-import nl.ordina.example.Domain.ToDoItem
+import nl.ordina.example.ToDoItem
 import org.axonframework.scynapse.test.EventMatchers
 import org.axonframework.test.Fixtures
 import org.scalatest.{FlatSpec, ShouldMatchers}
