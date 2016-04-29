@@ -7,7 +7,7 @@ import org.scalatest.{FunSuite, Matchers}
   * @author Eric Malotaux
   * @date 4/29/16.
   */
-class Geslachtsaanduiding$Test extends FunSuite with Matchers {
+class GeslachtsaanduidingTest extends FunSuite with Matchers {
 
   test("test VROUW") {
     val vrouw: GeslachtsaanduidingWaarde = Geslachtsaanduiding.VROUW
