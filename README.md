@@ -10,4 +10,8 @@ Stack uses the following:
 
 In the future we will support tracking of Orcs aswell
 
+Publicly availalable documentation:
+
+ - [Stelselcatalogus](http://www.digitaleoverheid.nl/onderwerpen/stelselinformatiepunt/stelsel-van-basisregistraties/stelselvoorzieningen/stelselcatalogus/authentieke-gegevens)
+
 ![](http://vignette1.wikia.nocookie.net/dragons-crown/images/b/bf/Orc.png/revision/latest?cb=20140311062419)
