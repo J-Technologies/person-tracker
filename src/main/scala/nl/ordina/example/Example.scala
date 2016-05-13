@@ -4,6 +4,7 @@ import java.io.File
 import java.util.UUID
 
 import nl.ordina.commands.CreateToDoItemCommand
+import nl.ordina.eventstore.CouchbaseEventStore
 import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
@@ -21,7 +22,7 @@ object Example {
   val commandGateway = new DefaultCommandGateway(commandBus)
   val eventStore = new FileSystemEventStore(new SimpleEventFileResolver(new File("./events")))
   val eventBus = new SimpleEventBus()
-  val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], eventStore)
+  val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], new CouchbaseEventStore)
 
   def setupAxon() = {
     repo.setEventBus(eventBus)
