@@ -1,4 +1,4 @@
-package nl.ordina.personen
+package nl.ordina
 
 import java.text.MessageFormat
 import scala.collection.JavaConversions._
@@ -11,7 +11,7 @@ import scala.collection.JavaConversions._
   * @author Eric Malotaux
   * @date 5/13/16.
   */
-package object domein {
+package object personen {
   sealed case class ErnstControleRegel(code: String, naam: String)
   object BLOKKEREND extends ErnstControleRegel("B", "Blokkerend")
   object DEBLOKKEERBAAR extends ErnstControleRegel("D", "Deblokkeerbaar")

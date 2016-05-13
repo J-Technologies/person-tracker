@@ -2,9 +2,10 @@
   * Copyright (C) 2016 Ordina
   */
 
-package nl.ordina.personen.domein.datatype
+package nl.ordina.personen.datatype
 
-import nl.ordina.personen.domein.ControleRegelException
+import nl.ordina.personen.ControleRegelException
+import nl.ordina.personen.datatype.Burgerservicenummer
 import org.scalatest.{FunSuite, Matchers}
 
 class BurgerservicenummerTest extends FunSuite with Matchers {

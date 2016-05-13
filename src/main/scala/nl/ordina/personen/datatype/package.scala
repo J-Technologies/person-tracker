@@ -2,7 +2,7 @@
   * Copyright (C) 2016 Ordina
   */
 
-package nl.ordina.personen.domein
+package nl.ordina.personen
 
 /**
   * @author Eric Malotaux

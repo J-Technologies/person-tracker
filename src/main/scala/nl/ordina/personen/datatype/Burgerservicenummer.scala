@@ -2,9 +2,9 @@
   * Copyright (C) 2016 Ordina
   */
 
-package nl.ordina.personen.domein.datatype
+package nl.ordina.personen.datatype
 
-import nl.ordina.personen.domein.{BRAL0012, controle}
+import nl.ordina.personen.{BRAL0012, controle}
 
 /**
   * @author Eric Malotaux

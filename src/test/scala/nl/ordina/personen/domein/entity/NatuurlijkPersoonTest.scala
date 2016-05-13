@@ -4,7 +4,7 @@
 
 package nl.ordina.personen.domein.entity
 
-import nl.ordina.personen.domein.datatype.{Burgerservicenummer, INGESCHREVENE}
+import nl.ordina.personen.datatype.{Burgerservicenummer, INGESCHREVENE}
 import org.scalatest.{FunSuite, Matchers}
 
 /**
