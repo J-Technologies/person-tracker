@@ -19,7 +19,9 @@ Publicly availalable documentation:
 
 
 #### Couchbase
- - Install couchbase: `brew cask install couchbase-server-enterprise`
+ Install couchbase:
+  - Mac: `brew cask install couchbase-server-enterprise`
+  - Debian: `dpkg -i couchbase-server <version>.deb`
 
  Helpful commands:
  - Flush bucket: `curl -X POST -u <username>:<password> http://127.0.0.1:8091/pools/default/buckets/default/controller/doFlush`
