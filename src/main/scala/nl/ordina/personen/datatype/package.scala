@@ -20,4 +20,22 @@ package object datatype {
   case object VROUW extends Geslachtsaanduiding("V", "Vrouw")
   case object ONBEKEND extends Geslachtsaanduiding("O", "Onbekend")
 
+  abstract class SimpleValueObject[T](value: T) {
+    override def toString = value.toString
+  }
+  case class Voornamen(values: String*) {
+    override def toString = values.mkString(" ")
+  }
+
+  case class SamengesteldeNaam(
+    voornamen: Voornamen,
+    voorvoegsel: Voorvoegsel,
+    geslachtsnaam: Geslachtsnaam
+  ) {
+    override def toString = s"$voornamen $voorvoegsel $geslachtsnaam"
+  }
+
+  case class Voorvoegsel(value: String) extends SimpleValueObject(value)
+  case class Geslachtsnaam(value: String) extends SimpleValueObject(value)
+
 }

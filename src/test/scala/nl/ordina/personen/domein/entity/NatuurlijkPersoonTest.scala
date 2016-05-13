@@ -4,7 +4,7 @@
 
 package nl.ordina.personen.domein.entity
 
-import nl.ordina.personen.datatype.{Burgerservicenummer, INGESCHREVENE}
+import nl.ordina.personen.datatype._
 import org.scalatest.{FunSuite, Matchers}
 
 /**
@@ -16,7 +16,15 @@ class NatuurlijkPersoonTest extends FunSuite with Matchers {
   val bsn: Burgerservicenummer = Burgerservicenummer(TEST_BSN)
 
   test("een geldig natuurlijk persoon") {
-    val persoon: NatuurlijkPersoon = NatuurlijkPersoon(INGESCHREVENE, bsn)
+    val persoon: NatuurlijkPersoon = NatuurlijkPersoon(
+      INGESCHREVENE,
+      bsn,
+      SamengesteldeNaam(
+        Voornamen("Eric", "Jan"),
+        null,
+        Geslachtsnaam("Malotaux")
+      )
+    )
     persoon.soortPersoon should be(INGESCHREVENE)
     persoon.burgerservicenummer should be(bsn)
   }

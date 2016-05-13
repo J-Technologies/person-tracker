@@ -4,7 +4,6 @@
 
 package nl.ordina.personen.datatype
 
-import nl.ordina.personen.datatype.{MAN, ONBEKEND, VROUW}
 import org.scalatest.{FunSuite, Matchers}
 
 class GeslachtsaanduidingTest extends FunSuite with Matchers {

@@ -4,22 +4,12 @@
 
 package nl.ordina.personen.domein.entity
 
-import nl.ordina.personen.datatype.{Burgerservicenummer, INGESCHREVENE, SoortPersoon}
-
-/**
-  * @author Eric Malotaux
-  * @date 5/13/16.
-  */
+import nl.ordina.personen.datatype.{Burgerservicenummer, INGESCHREVENE, SamengesteldeNaam, SoortPersoon}
 
 abstract class Persoon(val soortPersoon: SoortPersoon = INGESCHREVENE)
 
-class NatuurlijkPersoon(
-  soortPersoon: SoortPersoon,
-  val burgerservicenummer: Burgerservicenummer
+case class NatuurlijkPersoon(
+  override val soortPersoon: SoortPersoon,
+  burgerservicenummer: Burgerservicenummer,
+  samengesteldeNaam: SamengesteldeNaam
 ) extends Persoon(soortPersoon)
-object NatuurlijkPersoon {
-  def apply(
-    soortPersoon: SoortPersoon,
-    burgerservicenummer: Burgerservicenummer
-  ): NatuurlijkPersoon = new NatuurlijkPersoon(soortPersoon, burgerservicenummer)
-}
