@@ -10,12 +10,19 @@ libraryDependencies ++= Seq(
 
 //Server deps
 libraryDependencies ++= Seq(
-  "org.http4s" %% "http4s-dsl" % "0.13.2",
-  "org.http4s" %% "http4s-blaze-core" % "0.13.2",
+  "org.http4s" %% "http4s-dsl"          % "0.13.2",
+  "org.http4s" %% "http4s-blaze-core"   % "0.13.2",
   "org.http4s" %% "http4s-blaze-server" % "0.13.2"
 )
 
 //Test deps
 libraryDependencies ++= Seq(
   "org.scalatest"               %% "scalatest"          % "2.2.6" % "test"
+)
+
+
+//Couchbase deps
+resolvers += "ReactiveCouchbase Releases" at "https://raw.github.com/ReactiveCouchbase/repository/master/releases/"
+libraryDependencies ++= Seq(
+  "org.reactivecouchbase" %% "reactivecouchbase-core" % "0.3"
 )

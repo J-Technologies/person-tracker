@@ -16,3 +16,10 @@ Publicly availalable documentation:
  - [Logisch ontwerp BRP](http://www.operatiebrp.nl/afnemers/logisch-ontwerp-brp)
 
 ![](http://vignette1.wikia.nocookie.net/dragons-crown/images/b/bf/Orc.png/revision/latest?cb=20140311062419)
+
+
+#### Couchbase
+ - Install couchbase: `brew cask install couchbase-server-enterprise`
+
+ Helpful commands:
+ - Flush bucket: `curl -X POST -u <username>:<password> http://127.0.0.1:8091/pools/default/buckets/default/controller/doFlush`
