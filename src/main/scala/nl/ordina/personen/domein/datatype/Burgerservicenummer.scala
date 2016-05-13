@@ -4,6 +4,8 @@
 
 package nl.ordina.personen.domein.datatype
 
+import nl.ordina.personen.domein.{BRAL0012, controle}
+
 /**
   * @author Eric Malotaux
   * @date 5/13/16.
@@ -14,7 +16,7 @@ case class Burgerservicenummer(value: String) {
     value.length == Burgerservicenummer.LENGTE,
     s"Een burgerservicenummer heeft negen cijfers; $value heeft er ${value.length}"
   )
-  assert(Burgerservicenummer.elfproef(value), s"$value is geen geldig burgerservicenummer")
+  controle(Burgerservicenummer.elfproef(value), BRAL0012, value)
 }
 object Burgerservicenummer {
   val LENGTE: Int = 9

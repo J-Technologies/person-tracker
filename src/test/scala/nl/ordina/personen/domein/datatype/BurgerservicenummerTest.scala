@@ -4,6 +4,7 @@
 
 package nl.ordina.personen.domein.datatype
 
+import nl.ordina.personen.domein.ControleRegelException
 import org.scalatest.{FunSuite, Matchers}
 
 class BurgerservicenummerTest extends FunSuite with Matchers {
@@ -31,14 +32,13 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
 
   test("ongeldige burgerservicenummers") {
     geldigeNummers.map(n => (n.toInt + 7).toString).foreach { n =>
-      the[AssertionError] thrownBy Burgerservicenummer(n) should have message s"assertion failed: $n is geen geldig " +
-        s"burgerservicenummer"
+      the[ControleRegelException] thrownBy Burgerservicenummer(n) should have message s"$n moet voldoen aan de elfproef"
     }
   }
 
   test("ongeldige burgerservicenummers als integer") {
     geldigeNummers.map(n => n.toInt + 7).foreach { n =>
-      the[AssertionError] thrownBy Burgerservicenummer(n) should have message s"assertion failed: $n is geen geldig " +
+      the[ControleRegelException] thrownBy Burgerservicenummer(n) should have message s"$n moet voldoen aan de elfproef"
         s"burgerservicenummer"
     }
   }
@@ -54,8 +54,9 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
   }
 
   test("te kort burgerservicenummer als integer") {
-    the[AssertionError] thrownBy Burgerservicenummer(123) should have message "assertion failed: 000000123 is geen " +
-      "geldig burgerservicenummer"
+    val n: Int = 123
+    val s = f"$n%09d"
+    the[ControleRegelException] thrownBy Burgerservicenummer(n) should have message s"$s moet voldoen aan de elfproef"
   }
 
   test("te lang burgerservicenummer als integer") {
