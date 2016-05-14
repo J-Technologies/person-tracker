@@ -1,5 +1,7 @@
 package nl.ordina.personen.datatype
 
+import nl.ordina.personen.datatype.JaOfNee.Ja
+
 case class SamengesteldeNaam(
   voornamen: Voornamen,
   voorvoegsel: Option[Voorvoegsel] = None,
@@ -8,6 +10,7 @@ case class SamengesteldeNaam(
   predicaat: Option[Predicaat] = None,
   titel: Option[AdellijkeTitel] = None
 ) {
+  val afgeleid = Ja
   override def toString = {
     val achternaam = List(
       voorvoegsel, bepaalScheidingsteken, Some(geslachtsnaamstam)
@@ -22,6 +25,7 @@ case class SamengesteldeNaam(
 }
 
 case class Voornamen(values: String*) {
+  assert(values.map(v => v.length).sum <= 200, "voornamen mogen samen niet langer dan 200 tekens zijn")
   override def toString = values.mkString(" ")
 }
 

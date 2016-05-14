@@ -10,6 +10,12 @@ package nl.ordina.personen
   */
 package object datatype {
 
+  sealed abstract class JaOfNee
+  object JaOfNee {
+    object Ja extends JaOfNee
+    object Nee extends JaOfNee
+  }
+
   sealed abstract class SoortPersoon(val code: String, val naam: String)
   object SoortPersoon {
     case object INGESCHREVENE extends SoortPersoon("I", "Ingeschrevene")
