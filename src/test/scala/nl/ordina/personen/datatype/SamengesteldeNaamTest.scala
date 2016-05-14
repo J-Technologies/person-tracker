@@ -37,13 +37,13 @@ class SamengesteldeNaamTest extends FunSuite with Matchers {
 
   test("een jonkheer") {
     val naam = SamengesteldeNaam(
-      Voornamen("Claus", "George", "Willem", "Otto", "Frederik", "Geert"),
-      Some(Voorvoegsel("van")),
-      None,
-      Geslachtsnaamstam("Amsberg"),
-      Some(Predicaat.JONKHEER)
+      voornamen = Voornamen("Claus", "George", "Willem", "Otto", "Frederik", "Geert"),
+      voorvoegsel = Some(Voorvoegsel("van")),
+      geslachtsnaamstam = Geslachtsnaamstam("Amsberg"),
+      predicaat = Some(Predicaat.JONKHEER),
+      titel = Some(AdellijkeTitel.PRINS)
     )
-    naam.toString should be("Jonkheer Claus George Willem Otto Frederik Geert van Amsberg")
+    naam.toString should be("Jonkheer Claus George Willem Otto Frederik Geert Prins van Amsberg")
   }
 
 }
