@@ -4,13 +4,14 @@ case class SamengesteldeNaam(
   voornamen: Voornamen,
   voorvoegsel: Option[Voorvoegsel] = None,
   scheidingsteken: Option[Scheidingsteken] = None,
-  geslachtsnaamstam: Geslachtsnaamstam
+  geslachtsnaamstam: Geslachtsnaamstam,
+  predicaat: Option[Predicaat] = None
 ) {
   override def toString = {
     val achternaam = List(
       voorvoegsel, bepaalScheidingsteken, Some(geslachtsnaamstam)
     ).flatten.mkString
-    s"$voornamen $achternaam"
+    List(predicaat, Some(voornamen), Some(achternaam)).flatten.mkString(" ")
   }
   def bepaalScheidingsteken: Option[Scheidingsteken] =
     if (voorvoegsel != None)
@@ -24,8 +25,9 @@ object SamengesteldeNaam {
     voornamen: Voornamen,
     voorvoegsel: Voorvoegsel,
     scheidingsteken: Scheidingsteken,
-    geslachtsnaamstam: Geslachtsnaamstam
-  ): SamengesteldeNaam = apply(voornamen, Some(voorvoegsel), Some(scheidingsteken), geslachtsnaamstam)
+    geslachtsnaamstam: Geslachtsnaamstam,
+    predicaat: Predicaat
+  ): SamengesteldeNaam = apply(voornamen, Some(voorvoegsel), Some(scheidingsteken), geslachtsnaamstam, Some(predicaat))
 }
 
 case class Voornamen(values: String*) {

@@ -35,4 +35,15 @@ class SamengesteldeNaamTest extends FunSuite with Matchers {
     naam.toString should be("Pieter d'Hond")
   }
 
+  test("een jonkheer") {
+    val naam = SamengesteldeNaam(
+      Voornamen("Claus", "George", "Willem", "Otto", "Frederik", "Geert"),
+      Some(Voorvoegsel("van")),
+      None,
+      Geslachtsnaamstam("Amsberg"),
+      Some(Predicaat.JONKHEER)
+    )
+    naam.toString should be("Jonkheer Claus George Willem Otto Frederik Geert van Amsberg")
+  }
+
 }
