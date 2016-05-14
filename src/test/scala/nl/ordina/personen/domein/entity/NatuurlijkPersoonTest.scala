@@ -17,15 +17,11 @@ class NatuurlijkPersoonTest extends FunSuite with Matchers {
 
   test("een geldig natuurlijk persoon") {
     val persoon: NatuurlijkPersoon = NatuurlijkPersoon(
-      INGESCHREVENE,
+      SoortPersoon.INGESCHREVENE,
       bsn,
-      SamengesteldeNaam(
-        Voornamen("Eric", "Jan"),
-        null,
-        Geslachtsnaam("Malotaux")
-      )
+      SamengesteldeNaam(voornamen = Voornamen("Eric", "Jan"), geslachtsnaamstam = Geslachtsnaamstam("Malotaux"))
     )
-    persoon.soortPersoon should be(INGESCHREVENE)
+    persoon.soortPersoon should be(SoortPersoon.INGESCHREVENE)
     persoon.burgerservicenummer should be(bsn)
   }
 

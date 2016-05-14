@@ -4,7 +4,8 @@
 
 package nl.ordina.personen.domein.entity
 
-import nl.ordina.personen.datatype.{Burgerservicenummer, INGESCHREVENE, SamengesteldeNaam, SoortPersoon}
+import nl.ordina.personen.datatype.SoortPersoon.INGESCHREVENE
+import nl.ordina.personen.datatype.{Burgerservicenummer, SamengesteldeNaam, SoortPersoon}
 
 abstract class Persoon(val soortPersoon: SoortPersoon = INGESCHREVENE)
 
