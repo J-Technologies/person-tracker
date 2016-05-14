@@ -1,24 +1,49 @@
 package nl.ordina.eventstore
 
-import org.axonframework.domain.{DomainEventMessage, DomainEventStream, SimpleDomainEventStream}
+import java.util
+
+import org.axonframework.domain.{DomainEventMessage, DomainEventStream, GenericDomainEventMessage, SimpleDomainEventStream}
 import org.axonframework.eventstore.EventStore
 import org.axonframework.scynapse.serialization.xml.XStreamSerializer
-import org.axonframework.serializer.SerializedObject
+import org.axonframework.serializer.{SerializedObject, SimpleSerializedObject}
+import org.joda.time.DateTime
 import org.reactivecouchbase.CouchbaseRWImplicits.jsObjectToDocumentWriter
+import org.reactivecouchbase.CouchbaseRWImplicits.documentAsJsObjectReader
 import org.reactivecouchbase.ReactiveCouchbaseDriver
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json._
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 import scala.util.Success
 
 class CouchbaseEventStore extends EventStore {
 
+  val s = new XStreamSerializer()
+
   val driver = ReactiveCouchbaseDriver()
   val bucket = driver.bucket("default")
 
-  val s = new XStreamSerializer()
+  override def readEvents(`type`: String, identifier: Any): DomainEventStream = {
+    val event = Await.result(bucket.get[JsObject](identifier.toString), Duration.Undefined).get // Kill All the Unicorns!
+    val timestamp = (event \ "timestamp").as[DateTime]
+    val sequenceNumber = (event \ "sequenceNumber").as[Long]
 
-  override def readEvents(`type`: String, identifier: scala.Any): DomainEventStream = new SimpleDomainEventStream()
+    val serializedPayload = new SimpleSerializedObject(
+      (event \ "serializedPayload").as[String],
+      classOf[String],
+      "ignored", "0")
+    val classType = Class.forName(`type`)
+    val payload = s.deserialize(serializedPayload).asInstanceOf[classType.type]
+
+    val serializedMetaData = new SimpleSerializedObject(
+      (event \ "serializedMetaData").as[String],
+      classOf[String],
+      "ignored", "0")
+    val metadata = s.deserialize(serializedMetaData).asInstanceOf[util.HashMap[String, _]]
+
+    new SimpleDomainEventStream(new GenericDomainEventMessage[classType.type](`type`, timestamp, identifier, sequenceNumber, payload, metadata))
+  }
 
   override def appendEvents(`type`: String, events: DomainEventStream): Unit = {
     while (events.hasNext) {
