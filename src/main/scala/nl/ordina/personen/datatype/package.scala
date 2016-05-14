@@ -4,6 +4,9 @@
 
 package nl.ordina.personen
 
+import java.time.format.DateTimeFormatter
+import java.time.{Instant, LocalDate, ZoneId}
+
 /**
   * @author Eric Malotaux
   * @date 5/13/16.
@@ -41,5 +44,15 @@ package object datatype {
   abstract class Waardenlijst[T](value: T, lijst: Set[T]) extends SimpleValueObject {
     private val contains: Boolean = lijst(value)
     assert(contains, s"$value komt niet voor in de lijst van toegestane voorvoegsels")
+  }
+
+  case class Datum(val value: LocalDate) extends SimpleValueObject(value)
+  object Datum {
+    def apply(value: Instant): Datum = apply(value.atZone(ZoneId.systemDefault).toLocalDate)
+    def vandaag = apply(Instant.now)
+    def apply(value: String): Datum = {
+      if (value.contains("-")) apply(LocalDate.parse(value))
+      else apply(LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE))
+    }
   }
 }
