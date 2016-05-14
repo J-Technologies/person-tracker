@@ -7,8 +7,7 @@ import org.axonframework.eventstore.EventStore
 import org.axonframework.scynapse.serialization.xml.XStreamSerializer
 import org.axonframework.serializer.{SerializedObject, SimpleSerializedObject}
 import org.joda.time.DateTime
-import org.reactivecouchbase.CouchbaseRWImplicits.jsObjectToDocumentWriter
-import org.reactivecouchbase.CouchbaseRWImplicits.documentAsJsObjectReader
+import org.reactivecouchbase.CouchbaseRWImplicits.{documentAsJsObjectReader, jsObjectToDocumentWriter}
 import org.reactivecouchbase.ReactiveCouchbaseDriver
 import play.api.libs.json._
 
@@ -29,20 +28,19 @@ class CouchbaseEventStore extends EventStore {
     val timestamp = (event \ "timestamp").as[DateTime]
     val sequenceNumber = (event \ "sequenceNumber").as[Long]
 
-    val serializedPayload = new SimpleSerializedObject(
-      (event \ "serializedPayload").as[String],
-      classOf[String],
-      "ignored", "0")
     val classType = Class.forName(`type`)
-    val payload = s.deserialize(serializedPayload).asInstanceOf[classType.type]
 
-    val serializedMetaData = new SimpleSerializedObject(
-      (event \ "serializedMetaData").as[String],
-      classOf[String],
-      "ignored", "0")
-    val metadata = s.deserialize(serializedMetaData).asInstanceOf[util.HashMap[String, _]]
+    val payload = deserializeObject(event, "serializedPayload", classType).asInstanceOf[classType.type]
+    val metadata = deserializeObject(event, "serializedMetaData", classOf[util.HashMap[String, Any]])
 
     new SimpleDomainEventStream(new GenericDomainEventMessage[classType.type](`type`, timestamp, identifier, sequenceNumber, payload, metadata))
+  }
+
+  def deserializeObject[T](jsEvent: JsObject, field: String, output: Class[T]): T = {
+    s.deserialize(new SimpleSerializedObject(
+      (jsEvent \ field).as[String],
+      classOf[String],
+      "ignored", "0")).asInstanceOf[T]
   }
 
   override def appendEvents(`type`: String, events: DomainEventStream): Unit = {
