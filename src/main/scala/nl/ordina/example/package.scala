@@ -1,3 +1,7 @@
+/**
+  * Copyright (C) 2016 Ordina
+  */
+
 package nl.ordina
 
 import org.axonframework.scynapse.annotations.aggregateId

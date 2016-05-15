@@ -1,3 +1,7 @@
+/**
+  * Copyright (C) 2016 Ordina
+  */
+
 package nl.ordina.example
 
 import java.io.File
@@ -32,10 +36,12 @@ object Example {
 
   def setupBlazeServer() = {
     BlazeBuilder.bindHttp(8123)
-      .mountService(HttpService { case GET -> Root / description =>
+      .mountService(
+        HttpService { case GET -> Root / description =>
           commandGateway.send(new CreateToDoItemCommand(UUID.randomUUID().toString, description))
           Ok(description)
-      }, "/todos")
+        }, "/todos"
+      )
       .run
       .awaitShutdown()
   }
