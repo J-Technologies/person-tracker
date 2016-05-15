@@ -11,13 +11,9 @@ case class SamengesteldeNaam(
   titel: Option[AdellijkeTitel] = None
 ) {
   val afgeleid = Ja
-  override def toString: String = {
-    val achternaam = List(
-      voorvoegsel, bepaalScheidingsteken, Some(geslachtsnaamstam)
-    ).flatten.mkString
-    List(predicaat, Some(voornamen), titel, Some(achternaam)).flatten.mkString(" ")
-  }
-  def bepaalScheidingsteken: Option[Scheidingsteken] =
+  lazy val achternaam = List(voorvoegsel, bepaalScheidingsteken, Some(geslachtsnaamstam)).flatten.mkString
+  override lazy val toString: String = List(predicaat, Some(voornamen), titel, Some(achternaam)).flatten.mkString(" ")
+  lazy val bepaalScheidingsteken: Option[Scheidingsteken] =
     if (voorvoegsel.isDefined)
       if (scheidingsteken.isEmpty) Some(Scheidingsteken(" "))
       else scheidingsteken
@@ -32,4 +28,3 @@ case class Voornamen(values: String*) {
 case class Scheidingsteken(value: String) extends StringMetBeperkteLengte(value, 1)
 
 case class Geslachtsnaamstam(value: String) extends StringMetBeperkteLengte(value, 200)
-

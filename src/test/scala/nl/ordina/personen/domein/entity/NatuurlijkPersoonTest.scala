@@ -4,6 +4,7 @@
 
 package nl.ordina.personen.domein.entity
 
+import nl.ordina.personen.datatype.Datum.vandaag
 import nl.ordina.personen.datatype.Geslachtsaanduiding.MAN
 import nl.ordina.personen.datatype._
 import org.scalatest.{FunSuite, Matchers}
@@ -25,6 +26,7 @@ class NatuurlijkPersoonTest extends FunSuite with Matchers {
     persoon.samengesteldeNaam.toString should be("Eric Jan Malotaux")
     persoon.geslacht should be(MAN)
     persoon.geboorte.datum.toString should be("1955-10-17")
+    persoon.geboorte.datum should be < vandaag
   }
 
 }

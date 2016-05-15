@@ -10,10 +10,10 @@ case class Gemeente(
   aanvangGeldigheid: Option[Datum] = None,
   eindeGeldigheid: Option[Datum] = None
 ) {
-  def voortzettendeGemeente: Option[Gemeente] = voortzettendeGemeenteCode.map(c => Gemeente(c.value))
+  lazy val voortzettendeGemeente: Option[Gemeente] = voortzettendeGemeenteCode.map(c => Gemeente(c.value))
 }
 object Gemeente {
-  private val xml = XML.load(Source.fromURL(getClass.getResource("/Gemeente.xml")).reader())
+  private val xml = XML.load(Source.fromURL(getClass.getResource("Gemeente.xml")).reader())
   private val lijst: Map[String, Gemeente] = (xml \\ "gemeente").map {
     node =>
       val code = (node \ "code").text

@@ -42,10 +42,16 @@ package object datatype {
     assert(contains, s"$value komt niet voor in de lijst van toegestane voorvoegsels")
   }
 
-  case class Datum(value: LocalDate) extends SimpleValueObject(value)
+  case class Datum(value: LocalDate) extends SimpleValueObject(value) with Ordered[Datum] {
+    override def compare(that: Datum): Int = this.value.compareTo(that.value)
+    def +(dagen: Int): Datum = Datum(value.plusDays(dagen))
+    def -(dagen: Int): Datum = Datum(value.minusDays(dagen))
+  }
   object Datum {
     def apply(value: Instant): Datum = apply(value.atZone(ZoneId.systemDefault).toLocalDate)
     def vandaag: Datum = apply(Instant.now)
+    def morgen: Datum = vandaag + 1
+    def gisteren: Datum = vandaag - 1
     def apply(value: String): Datum = {
       if (value.contains("-")) apply(LocalDate.parse(value))
       else apply(LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE))
