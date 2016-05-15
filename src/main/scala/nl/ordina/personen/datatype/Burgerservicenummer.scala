@@ -6,11 +6,6 @@ package nl.ordina.personen.datatype
 
 import nl.ordina.personen.{BRAL0012, controle}
 
-/**
-  * @author Eric Malotaux
-  * @date 5/13/16.
-  */
-
 case class Burgerservicenummer(value: String) {
   assert(
     value.length == Burgerservicenummer.LENGTE,

@@ -11,15 +11,15 @@ case class SamengesteldeNaam(
   titel: Option[AdellijkeTitel] = None
 ) {
   val afgeleid = Ja
-  override def toString = {
+  override def toString: String = {
     val achternaam = List(
       voorvoegsel, bepaalScheidingsteken, Some(geslachtsnaamstam)
     ).flatten.mkString
     List(predicaat, Some(voornamen), titel, Some(achternaam)).flatten.mkString(" ")
   }
   def bepaalScheidingsteken: Option[Scheidingsteken] =
-    if (voorvoegsel != None)
-      if (scheidingsteken == None) Some(Scheidingsteken(" "))
+    if (voorvoegsel.isDefined)
+      if (scheidingsteken.isEmpty) Some(Scheidingsteken(" "))
       else scheidingsteken
     else None
 }

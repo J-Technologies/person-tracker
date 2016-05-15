@@ -1,16 +1,5 @@
 package nl.ordina
 
-import java.text.MessageFormat
-import scala.collection.JavaConversions._
-
-/**
-  * Copyright (C) 2016 Ordina
-  */
-
-/**
-  * @author Eric Malotaux
-  * @date 5/13/16.
-  */
 package object personen {
   sealed case class ErnstControleRegel(code: String, naam: String)
   object BLOKKEREND extends ErnstControleRegel("B", "Blokkerend")

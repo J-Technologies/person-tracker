@@ -7,10 +7,6 @@ package nl.ordina.personen
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDate, ZoneId}
 
-/**
-  * @author Eric Malotaux
-  * @date 5/13/16.
-  */
 package object datatype {
 
   sealed abstract class JaOfNee
@@ -34,7 +30,7 @@ package object datatype {
   }
 
   abstract class SimpleValueObject[T](value: T) {
-    override def toString = value.toString
+    override def toString: String = value.toString
   }
 
   abstract class StringMetBeperkteLengte(value: String, length: Int) extends SimpleValueObject(value) {
@@ -46,10 +42,10 @@ package object datatype {
     assert(contains, s"$value komt niet voor in de lijst van toegestane voorvoegsels")
   }
 
-  case class Datum(val value: LocalDate) extends SimpleValueObject(value)
+  case class Datum(value: LocalDate) extends SimpleValueObject(value)
   object Datum {
     def apply(value: Instant): Datum = apply(value.atZone(ZoneId.systemDefault).toLocalDate)
-    def vandaag = apply(Instant.now)
+    def vandaag: Datum = apply(Instant.now)
     def apply(value: String): Datum = {
       if (value.contains("-")) apply(LocalDate.parse(value))
       else apply(LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE))

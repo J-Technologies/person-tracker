@@ -6,10 +6,6 @@ package nl.ordina.personen.datatype
 
 import org.scalatest.{FunSuite, Matchers}
 
-/**
-  * @author Eric Malotaux
-  * @date 5/14/16.
-  */
 class VoorvoegselTest extends FunSuite with Matchers {
   test("geldig voorvoegsel") {
     val voorvoegsel: Voorvoegsel = Voorvoegsel("van der")

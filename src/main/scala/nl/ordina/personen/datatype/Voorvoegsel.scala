@@ -6,7 +6,7 @@ package nl.ordina.personen.datatype
 
 import scala.collection.immutable.HashSet
 
-case class Voorvoegsel(val value: String) extends Waardenlijst[String](value, VoorvoegselLijst.lijst) {
+case class Voorvoegsel(value: String) extends Waardenlijst[String](value, VoorvoegselLijst.lijst) {
   override def toString: String = value.toString
 }
 
