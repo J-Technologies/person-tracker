@@ -26,15 +26,16 @@ class CouchbaseEventStore extends EventStore {
 
   override def readEvents(`type`: String, identifier: Any): DomainEventStream = {
     val event = Await.result(bucket.get[JsObject](identifier.toString), Duration.Undefined).get // Kill All the Unicorns!
+
+    val stringPayload = (event \ "serializedPayload").as[String]
+    val stringMetadata = (event \ "serializedMetaData").as[String]
     val timestamp = (event \ "timestamp").as[DateTime]
     val sequenceNumber = (event \ "sequenceNumber").as[Long]
 
-    val classType = Class.forName(`type`)
+    val payload: Any = mapper.readValue(stringPayload, Class.forName(`type`))
+    val metadata: util.HashMap[String, Any] = mapper.readValue(stringMetadata, classOf[util.HashMap[String, Any]])
 
-    val payload = (event \ "serializedPayload").as[classType.type]
-    val metadata = (event \ "serializedMetaData").as[util.HashMap[String, Any]]
-
-    new SimpleDomainEventStream(new GenericDomainEventMessage[classType.type](`type`, timestamp, identifier, sequenceNumber, payload, metadata))
+    new SimpleDomainEventStream(new GenericDomainEventMessage[Any](`type`, timestamp, identifier, sequenceNumber, payload, metadata))
   }
 
   override def appendEvents(`type`: String, events: DomainEventStream): Unit = {
