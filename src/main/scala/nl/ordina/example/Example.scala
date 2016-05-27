@@ -4,7 +4,6 @@
 
 package nl.ordina.example
 
-import java.io.File
 import java.util.UUID
 
 import nl.ordina.commands.CreateToDoItemCommand
@@ -15,7 +14,6 @@ import org.axonframework.commandhandling.gateway.DefaultCommandGateway
 import org.axonframework.eventhandling.SimpleEventBus
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter
 import org.axonframework.eventsourcing.EventSourcingRepository
-import org.axonframework.eventstore.fs.{FileSystemEventStore, SimpleEventFileResolver}
 import org.http4s.HttpService
 import org.http4s.dsl._
 import org.http4s.server.blaze.BlazeBuilder
@@ -24,7 +22,6 @@ object Example {
 
   val commandBus = new SimpleCommandBus()
   val commandGateway = new DefaultCommandGateway(commandBus)
-  val eventStore = new FileSystemEventStore(new SimpleEventFileResolver(new File("./events")))
   val eventBus = new SimpleEventBus()
   val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], new CouchbaseEventStore)
 
