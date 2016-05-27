@@ -5,8 +5,7 @@ scalaVersion := "2.11.7"
 //Axon deps
 libraryDependencies ++= Seq(
   "org.axonframework.scynapse"  % "scynapse-core_2.11"  % "0.5.5",
-  "joda-time"                   % "joda-time"           % "2.8.1",
-  "org.axonframework.scynapse"  % "scynapse-test_2.11"  % "0.5.5" % "test"
+  "joda-time"                   % "joda-time"           % "2.8.1"
 )
 
 //Server deps
@@ -18,7 +17,8 @@ libraryDependencies ++= Seq(
 
 //Test deps
 libraryDependencies ++= Seq(
-  "org.scalatest"               %% "scalatest"          % "2.2.6" % "test"
+  "org.scalatest"               %% "scalatest"          % "2.2.6" % "test",
+  "org.axonframework.scynapse"  % "scynapse-test_2.11"  % "0.5.5" % "test"
 )
 
 
@@ -27,3 +27,5 @@ resolvers += "ReactiveCouchbase Releases" at "https://raw.github.com/ReactiveCou
 libraryDependencies ++= Seq(
   "org.reactivecouchbase" %% "reactivecouchbase-core" % "0.3"
 )
+
+libraryDependencies += "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.7.3"
