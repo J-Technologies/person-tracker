@@ -30,8 +30,7 @@ object Burgerservicenummer {
     val cijfers = f"$random%08d".map(c => c.asDigit)
     val producten = cijfers.zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }
     val controlecijfer = producten.sum % 11
-    if (controlecijfer < 10)
-      new Burgerservicenummer((cijfers :+ controlecijfer).mkString)
+    if (controlecijfer < 10) new Burgerservicenummer((cijfers :+ controlecijfer).mkString)
     else nieuw
   }
 }
