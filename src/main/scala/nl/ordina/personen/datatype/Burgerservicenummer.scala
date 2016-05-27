@@ -6,6 +6,8 @@ package nl.ordina.personen.datatype
 
 import nl.ordina.personen.{BRAL0012, controle}
 
+import scala.util.Random
+
 case class Burgerservicenummer(value: String) {
   assert(
     value.length == Burgerservicenummer.LENGTE,
@@ -22,5 +24,14 @@ object Burgerservicenummer {
     val controlecijfer = cijfers(SIGNIFICANTE_LENGTE)
     val producten = cijfers.take(SIGNIFICANTE_LENGTE).zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }
     controlecijfer == producten.sum % 11
+  }
+  def nieuw: Burgerservicenummer = {
+    val random: Int = Random.nextInt(99999999)
+    val cijfers = f"$random%08d".map(c => c.asDigit)
+    val producten = cijfers.zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }
+    val controlecijfer = producten.sum % 11
+    if (controlecijfer < 10)
+      new Burgerservicenummer((cijfers :+ controlecijfer).mkString)
+    else nieuw
   }
 }

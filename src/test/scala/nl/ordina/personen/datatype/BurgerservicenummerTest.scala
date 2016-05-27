@@ -63,4 +63,9 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
     the[AssertionError] thrownBy Burgerservicenummer(1234567890) should have message "assertion failed: Een " +
       "burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
   }
+
+  test("genereer een nieuw burgerservicenummer") {
+    val bsn = Burgerservicenummer.nieuw
+    println(bsn)
+  }
 }
