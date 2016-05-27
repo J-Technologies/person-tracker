@@ -1,0 +1,26 @@
+{
+  "name": "person-tracker",
+  "version": "1.0.0",
+  "description": "The frontend space for the person-tracker project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeijevanSloten/person-tracker.git"
+  },
+  "keywords": [
+    "person-tracker"
+  ],
+  "author": "Some cool people",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TeijevanSloten/person-tracker/issues"
+  },
+  "homepage": "https://github.com/TeijevanSloten/person-tracker#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
