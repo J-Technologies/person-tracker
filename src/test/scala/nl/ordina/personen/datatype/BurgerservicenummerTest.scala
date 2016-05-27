@@ -50,7 +50,7 @@ class BurgerservicenummerTest extends FunSuite with GeneratorDrivenPropertyCheck
   }
 
   val generator = Gen.resultOf[Unit, Burgerservicenummer](x => Burgerservicenummer.nieuw)
-  
+
   test("geldig burgerservicenummer") {
     forAll(generator) { n => /* Geen Exception */}
   }

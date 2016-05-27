@@ -18,13 +18,12 @@ case class Burgerservicenummer(value: String) {
 object Burgerservicenummer {
   val LENGTE: Int = 9
   val SIGNIFICANT: Int = 8
-  def elfproef(value: String): Boolean = value(SIGNIFICANT).asDigit == berekenSom(value)
+  def elfproef(value: String): Boolean = value(SIGNIFICANT).asDigit == chk(value)
   def nieuw: Burgerservicenummer = {
     val value: String = f"${Random.nextInt(99999999)}%08d"
-    val som = berekenSom(value)
-    if (som < 10) new Burgerservicenummer(value + som.toString)
+    val checkDigit = chk(value)
+    if (checkDigit < 10) new Burgerservicenummer(value + checkDigit.toString)
     else nieuw
   }
-  def berekenSom(value: String): Int =
-    value.map(c => c.asDigit).take(SIGNIFICANT).zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }.sum % 11
+  def chk(v: String) = v.map(_.asDigit).take(SIGNIFICANT).zipWithIndex.map { case (d, i) => d * (LENGTE - i) }.sum % 11
 }
