@@ -29,3 +29,4 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.7.3"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.5" % "test"

@@ -5,9 +5,11 @@
 package nl.ordina.personen.datatype
 
 import nl.ordina.personen.ControleRegelException
+import org.scalacheck.Gen
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FunSuite, Matchers}
 
-class BurgerservicenummerTest extends FunSuite with Matchers {
+class BurgerservicenummerTest extends FunSuite with GeneratorDrivenPropertyChecks with Matchers {
 
   val geldigeNummers =
     """881011320 985083906 162470320 703626917 249913987 709548795 936636427 131529572 114845074 363090800 465797118
@@ -45,5 +47,11 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
   test("genereer een nieuw burgerservicenummer") {
     val bsn = Burgerservicenummer.nieuw
     println(bsn)
+  }
+
+  val generator = Gen.resultOf[Unit, Burgerservicenummer](x => Burgerservicenummer.nieuw)
+  
+  test("geldig burgerservicenummer") {
+    forAll(generator) { n => /* Geen Exception */}
   }
 }
