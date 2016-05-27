@@ -34,10 +34,12 @@ object Example {
   val eventBus = new SimpleEventBus()
   val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], new CouchbaseEventStore)
 
+  val testHandler: ToDoEventHandler = new ToDoEventHandler()
+
   def setupAxon() = {
     repo.setEventBus(eventBus)
     AggregateAnnotationCommandHandler.subscribe(classOf[ToDoItem], repo, commandBus)
-    AnnotationEventListenerAdapter.subscribe(new ToDoEventHandler(), eventBus)
+    AnnotationEventListenerAdapter.subscribe(testHandler, eventBus)
   }
 
   def setupBlazeServer() = {
@@ -54,7 +56,11 @@ object Example {
       .awaitShutdown()
   }
 
-  val somePolling: Process[Task, Text] = time.awakeEvery(1 seconds).map(d => Text("Delay -> " + d))
+  val somePolling: Process[Task, Text] = time.awakeEvery(1 seconds).map(d => {
+    if(testHandler.queue.nonEmpty) {
+      Text("Dequeued message -> " + testHandler.queue.dequeue())
+    } else Text("Dequeued message -> nothing new")
+  })
 
   def main(args: Array[String]) {
     setupAxon()
