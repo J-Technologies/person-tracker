@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Test the websocket</title>
+</head>
+<body>
+
+<h1>Messages received</h1>
+<hr>
+<pre></pre>
+
+<script>
+    var socket = new WebSocket('ws://localhost:8123/todos/websocket');
+
+    socket.onmessage = function (msg) {
+        document.getElementsByTagName('pre')[0].innerHTML += msg.data + '\n';
+        console.log(msg.data);
+    };
+</script>
+</body>
+</html>
