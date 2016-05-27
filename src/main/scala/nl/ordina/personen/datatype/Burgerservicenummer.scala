@@ -16,21 +16,15 @@ case class Burgerservicenummer(value: String) {
   controle(Burgerservicenummer.elfproef(value), BRAL0012, value)
 }
 object Burgerservicenummer {
-  def apply(value: Int): Burgerservicenummer = new Burgerservicenummer(f"$value%09d")
   val LENGTE: Int = 9
-  val SIGNIFICANTE_LENGTE: Int = 8
-  def elfproef(value: String): Boolean = {
-    val cijfers = value.map(c => c.asDigit)
-    val controlecijfer = cijfers(SIGNIFICANTE_LENGTE)
-    val producten = cijfers.take(SIGNIFICANTE_LENGTE).zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }
-    controlecijfer == producten.sum % 11
-  }
+  val SIGNIFICANT: Int = 8
+  def elfproef(value: String): Boolean = value(SIGNIFICANT).asDigit == berekenSom(value)
   def nieuw: Burgerservicenummer = {
-    val random: Int = Random.nextInt(99999999)
-    val cijfers = f"$random%08d".map(c => c.asDigit)
-    val producten = cijfers.zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }
-    val controlecijfer = producten.sum % 11
-    if (controlecijfer < 10) new Burgerservicenummer((cijfers :+ controlecijfer).mkString)
+    val value: String = f"${Random.nextInt(99999999)}%08d"
+    val som = berekenSom(value)
+    if (som < 10) new Burgerservicenummer(value + som.toString)
     else nieuw
   }
+  def berekenSom(value: String): Int =
+    value.map(c => c.asDigit).take(SIGNIFICANT).zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }.sum % 11
 }

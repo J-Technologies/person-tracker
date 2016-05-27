@@ -10,7 +10,7 @@ import nl.ordina.personen.datatype._
 import org.scalatest.{FunSuite, Matchers}
 
 class NatuurlijkPersoonTest extends FunSuite with Matchers {
-  val TEST_BSN: Int = 881011320
+  val TEST_BSN: String = "881011320"
   val bsn: Burgerservicenummer = Burgerservicenummer(TEST_BSN)
 
   test("een geldig natuurlijk persoon") {
