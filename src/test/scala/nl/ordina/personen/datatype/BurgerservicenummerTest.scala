@@ -44,14 +44,9 @@ class BurgerservicenummerTest extends FunSuite with GeneratorDrivenPropertyCheck
       "burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
   }
 
-  test("genereer een nieuw burgerservicenummer") {
-    val bsn = Burgerservicenummer.nieuw
-    println(bsn)
-  }
-
   val generator = Gen.resultOf[Unit, Burgerservicenummer](x => Burgerservicenummer.nieuw)
 
   test("geldig burgerservicenummer") {
-    forAll(generator) { n => /* Geen Exception */}
+    forAll(generator) { n => Burgerservicenummer(n.value) }
   }
 }

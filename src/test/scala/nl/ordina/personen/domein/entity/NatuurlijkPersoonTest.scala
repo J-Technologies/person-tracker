@@ -7,6 +7,7 @@ package nl.ordina.personen.domein.entity
 import nl.ordina.personen.datatype.Datum.vandaag
 import nl.ordina.personen.datatype.Geslachtsaanduiding.MAN
 import nl.ordina.personen.datatype._
+import nl.ordina.personen.datatype.groep.Geboorte
 import org.scalatest.{FunSuite, Matchers}
 
 class NatuurlijkPersoonTest extends FunSuite with Matchers {

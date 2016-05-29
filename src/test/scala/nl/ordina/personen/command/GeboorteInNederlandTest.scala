@@ -2,6 +2,7 @@ package nl.ordina.personen.command
 
 import nl.ordina.personen.datatype.Geslachtsaanduiding.MAN
 import nl.ordina.personen.datatype._
+import nl.ordina.personen.datatype.groep.Geboorte
 import nl.ordina.personen.domein.entity.NatuurlijkPersoon
 import nl.ordina.personen.event.PersoonGeboren
 import org.axonframework.test.{FixtureConfiguration, Fixtures}
@@ -16,8 +17,8 @@ class GeboorteInNederlandTest extends FunSuite with Matchers {
       bsn,
       SamengesteldeNaam(voornamen = Voornamen("Dirk"), geslachtsnaamstam = Geslachtsnaamstam("Luijk")),
       MAN,
-      geboorte = Geboorte(Datum("1993-01-01"), Gemeente("0505")),
-      bijhoudingspartij = Partij("000505")
+      Geboorte(Datum("1993-01-01"), Gemeente("0505")),
+      Partij("000505")
     )
 
     fixture.givenNoPriorActivity().when(geboorte).expectEvents(

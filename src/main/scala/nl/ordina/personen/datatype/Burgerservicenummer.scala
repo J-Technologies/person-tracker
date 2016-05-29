@@ -14,13 +14,15 @@ case class Burgerservicenummer(value: String) {
     s"Een burgerservicenummer heeft negen cijfers; $value heeft er ${value.length}"
   )
   controle(Burgerservicenummer.elfproef(value), BRAL0012, value)
+  override def toString = value
 }
 object Burgerservicenummer {
   val LENGTE: Int = 9
   val SIGNIFICANT: Int = 8
+  val random = Random
   def elfproef(value: String): Boolean = value(SIGNIFICANT).asDigit == chk(value)
   def nieuw: Burgerservicenummer = {
-    val value: String = f"${Random.nextInt(99999999)}%08d"
+    val value: String = f"${random.nextInt(100000000)}%08d"
     val checkDigit = chk(value)
     if (checkDigit < 10) new Burgerservicenummer(value + checkDigit.toString)
     else nieuw

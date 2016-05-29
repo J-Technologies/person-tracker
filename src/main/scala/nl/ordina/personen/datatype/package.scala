@@ -57,4 +57,11 @@ package object datatype {
       else apply(LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE))
     }
   }
+
+  sealed abstract case class Bijhoudingsaard(code: String, omschrijving: String)
+  object Bijhoudingsaard {
+    object INGEZETENE extends Bijhoudingsaard("I", "Ingezetene")
+    object NIET_INGEZETENE extends Bijhoudingsaard("N", "Niet-ingezetene")
+    object ONBEKEND extends Bijhoudingsaard("?", "Onbekend")
+  }
 }
