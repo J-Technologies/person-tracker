@@ -18,7 +18,8 @@ class NatuurlijkPersoonTest extends FunSuite with Matchers {
     val persoon: NatuurlijkPersoon = new NatuurlijkPersoon()
     persoon.burgerservicenummer = bsn
     persoon.samengesteldeNaam = SamengesteldeNaam(
-      voornamen = Voornamen("Eric", "Jan"), geslachtsnaamstam = Geslachtsnaamstam("Malotaux")
+      Voornamen("Eric", "Jan"),
+      Geslachtsnaam(Geslachtsnaamstam("Malotaux"))
     )
     persoon.geslacht = MAN
     persoon.geboorte = Geboorte(Datum("1955-10-17"), Gemeente("0518"))

@@ -10,38 +10,37 @@ class SamengesteldeNaamTest extends FunSuite with Matchers {
 
   test("met twee voornamen zonder voorvoegsel") {
     val naam = SamengesteldeNaam(
-      voornamen = Voornamen("Eric", "Jan"),
-      geslachtsnaamstam = Geslachtsnaamstam("Malotaux")
+      Voornamen("Eric", "Jan"),
+      Geslachtsnaam(Geslachtsnaamstam("Malotaux"))
     )
     naam.toString should be("Eric Jan Malotaux")
   }
 
   test("met twee voornamen en voorvoegsel") {
     val naam: SamengesteldeNaam = SamengesteldeNaam(
-      voornamen = Voornamen("Teije", "Sibrant"),
-      voorvoegsel = Some(Voorvoegsel("van")),
-      geslachtsnaamstam = Geslachtsnaamstam("Sloten")
+      Voornamen("Teije", "Sibrant"),
+      Geslachtsnaam(Geslachtsnaamstam("Sloten"), Some(Voorvoegsel("van")))
     )
     naam.toString should be("Teije Sibrant van Sloten")
   }
 
   test("met een raar scheidingsteken") {
     val naam = SamengesteldeNaam(
-      voornamen = Voornamen("Pieter"),
-      voorvoegsel = Some(Voorvoegsel("d")),
-      scheidingsteken = Some(Scheidingsteken("'")),
-      geslachtsnaamstam = Geslachtsnaamstam("Hond")
+      Voornamen("Pieter"),
+      Geslachtsnaam(Geslachtsnaamstam("Hond"), Some(Voorvoegsel("d")), Scheidingsteken("'"))
     )
     naam.toString should be("Pieter d'Hond")
   }
 
   test("een jonkheer") {
     val naam = SamengesteldeNaam(
-      voornamen = Voornamen("Claus", "George", "Willem", "Otto", "Frederik", "Geert"),
-      voorvoegsel = Some(Voorvoegsel("van")),
-      geslachtsnaamstam = Geslachtsnaamstam("Amsberg"),
-      predicaat = Some(Predicaat.JONKHEER),
-      titel = Some(AdellijkeTitel.PRINS)
+      Voornamen("Claus", "George", "Willem", "Otto", "Frederik", "Geert"),
+      Geslachtsnaam(
+        Geslachtsnaamstam("Amsberg"),
+        Some(Voorvoegsel("van")),
+        predicaat = Some(Predicaat.JONKHEER),
+        titel = Some(AdellijkeTitel.PRINS)
+      )
     )
     naam.toString should be("Jonkheer Claus George Willem Otto Frederik Geert Prins van Amsberg")
   }

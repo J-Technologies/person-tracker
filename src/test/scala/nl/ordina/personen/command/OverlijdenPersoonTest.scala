@@ -13,7 +13,7 @@ class OverlijdenPersoonTest extends FunSuite with Matchers {
   private var bsn: Burgerservicenummer = Burgerservicenummer.nieuw
   private val geboren: PersoonGeboren = PersoonGeboren(
     bsn,
-    SamengesteldeNaam(voornamen = Voornamen("Dirk"), geslachtsnaamstam = Geslachtsnaamstam("Luijk")),
+    SamengesteldeNaam(Voornamen("Dirk"), Geslachtsnaam(Geslachtsnaamstam("Luijk"))),
     MAN,
     Geboorte(Datum("1993-01-01"), Gemeente("0505")),
     Partij("000505")

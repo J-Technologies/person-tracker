@@ -15,7 +15,7 @@ class GeboorteInNederlandTest extends FunSuite with Matchers {
     val bsn: Burgerservicenummer = Burgerservicenummer.nieuw
     val geboorte = GeboorteInNederland(
       bsn,
-      SamengesteldeNaam(voornamen = Voornamen("Dirk"), geslachtsnaamstam = Geslachtsnaamstam("Luijk")),
+      SamengesteldeNaam(Voornamen("Dirk"), Geslachtsnaam(Geslachtsnaamstam("Luijk"))),
       MAN,
       Geboorte(Datum("1993-01-01"), Gemeente("0505")),
       Partij("000505")
