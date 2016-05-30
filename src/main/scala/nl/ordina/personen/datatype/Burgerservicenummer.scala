@@ -15,5 +15,5 @@ object Burgerservicenummer {
     val cd = som(value)
     if (cd < 10) new Burgerservicenummer(value + cd) else nieuw
   }
-  def som(v: String) = v.map(_.asDigit).zip(9 to (2, -1)).map { case (d, i) => d * i }.sum % 11
+  def som(v: String) = v.map(_.asDigit).zip(9 to 2 by -1).map { case (d, f) => d * f }.sum % 11
 }
