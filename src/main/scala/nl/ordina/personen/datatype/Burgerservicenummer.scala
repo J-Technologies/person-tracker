@@ -9,13 +9,13 @@ case class Burgerservicenummer(value: String) {
   controle(Burgerservicenummer.elfproef(value), BRAL0012, value)
   override def toString = value
 }
+
 object Burgerservicenummer {
-  val random = Random
-  def elfproef(value: String): Boolean = value.last.asDigit == checkDigit(value)
+  def elfproef(value: String) = som(value.take(8)) == value.last.asDigit
   def nieuw: Burgerservicenummer = {
-    val value = f"${random.nextInt(100000000)}%08d"
-    val cd = checkDigit(value)
-    if (cd < 10) new Burgerservicenummer(value + cd.toString) else nieuw
+    val value = f"${Random.nextInt(100000000)}%08d"
+    val cd = som(value)
+    if (cd < 10) new Burgerservicenummer(value + cd) else nieuw
   }
-  def checkDigit(v: String) = v.map(_.asDigit).take(8).reverse.zipWithIndex.map { case (d, i) => d * (i + 2) }.sum % 11
+  def som(v: String) = v.map(_.asDigit).reverse.zipWithIndex.map { case (d, i) => d * (i + 2) }.sum % 11
 }
