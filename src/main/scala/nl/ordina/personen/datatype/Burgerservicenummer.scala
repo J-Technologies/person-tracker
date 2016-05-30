@@ -4,10 +4,8 @@ import nl.ordina.personen.{BRAL0012, controle}
 
 import scala.util.Random
 
-case class Burgerservicenummer(value: String) {
-  assert(value.length == 9, s"Een burgerservicenummer heeft negen cijfers; $value heeft er ${value.length}")
+case class Burgerservicenummer(value: String) extends StringMetVasteLengte(value, 9) {
   controle(Burgerservicenummer.elfproef(value), BRAL0012, value)
-  override def toString = value
 }
 
 object Burgerservicenummer {

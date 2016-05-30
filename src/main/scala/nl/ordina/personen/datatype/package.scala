@@ -33,6 +33,10 @@ package object datatype {
     override def toString: String = value.toString
   }
 
+  abstract class StringMetVasteLengte(value: String, lengte: Int) extends SimpleValueObject(value) {
+    assert(value.length == lengte, s"lengte van $value is ${value.length}, maar moet precies $lengte zijn")
+  }
+
   abstract class StringMetBeperkteLengte(value: String, length: Int) extends SimpleValueObject(value) {
     assert(value.length <= length, s"lengte is ${value.length}, maar mag maximaal $length zijn")
   }

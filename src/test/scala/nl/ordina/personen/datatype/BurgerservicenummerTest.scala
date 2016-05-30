@@ -35,13 +35,13 @@ class BurgerservicenummerTest extends FunSuite with GeneratorDrivenPropertyCheck
   }
 
   test("te kort burgerservicenummer") {
-    the[AssertionError] thrownBy Burgerservicenummer("123") should have message "assertion failed: Een " +
-      "burgerservicenummer heeft negen cijfers; 123 heeft er 3"
+    the[AssertionError] thrownBy Burgerservicenummer("123") should have message
+      "assertion failed: lengte van 123 is 3, maar moet precies 9 zijn"
   }
 
   test("te lang burgerservicenummer") {
-    the[AssertionError] thrownBy Burgerservicenummer("1234567890") should have message "assertion failed: Een " +
-      "burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
+    the[AssertionError] thrownBy Burgerservicenummer("1234567890") should have message
+      "assertion failed: lengte van 1234567890 is 10, maar moet precies 9 zijn"
   }
 
   val generator = Gen.resultOf[Unit, Burgerservicenummer](x => Burgerservicenummer.nieuw)
