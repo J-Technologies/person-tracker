@@ -1,21 +1,19 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var clean = require('gulp-clean');
 var browserSync = require('browser-sync').create();
 
 var fs = require("fs");
 var browserify = require("browserify");
 
+if (!fs.existsSync('dist')){
+    fs.mkdirSync('dist');
+}
 
-gulp.task('default', ['clean', 'watch'], function () {
+gulp.task('default', ['watch'], function () {
     // place code for your default task here
 });
 
-gulp.task('clean', function () {
-    return gulp.src('dist', {read: false}).pipe(clean());
-});
-
-gulp.task('watch', ['browserSync', 'sass', 'babelify-js', 'index-html'], function () {
+gulp.task('watch', ['sass', 'babelify-js', 'index-html', 'browserSync'], function () {
     gulp.watch('src/scss/**/*.scss', ['sass']);
 
     gulp.watch('src/*.html', ['index-html']);
@@ -47,5 +45,5 @@ gulp.task('babelify-js', function () {
     browserify("src/js/index.js")
         .transform("babelify", {presets: ["es2015", "react"]})
         .bundle()
-        .pipe(fs.createWriteStream("dist/js/bundle.js"))
+        .pipe(fs.createWriteStream("dist/bundle.js"))
 });
