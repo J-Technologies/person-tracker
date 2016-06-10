@@ -1,16 +1,25 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
+var clean = require('gulp-clean');
 var browserSync = require('browser-sync').create();
 
-gulp.task('default', ['watch'], function () {
+var fs = require("fs");
+var browserify = require("browserify");
+
+
+gulp.task('default', ['clean', 'watch'], function () {
     // place code for your default task here
 });
 
-gulp.task('watch', ['browserSync', 'sass', 'copy-js', 'copy-index-html'], function () {
+gulp.task('clean', function () {
+    return gulp.src('dist', {read: false}).pipe(clean());
+});
+
+gulp.task('watch', ['browserSync', 'sass', 'babelify-js', 'index-html'], function () {
     gulp.watch('src/scss/**/*.scss', ['sass']);
 
-    gulp.watch('src/*.html', ['copy-index-html']);
-    gulp.watch('src/js/**/*.js', ['copy-js']);
+    gulp.watch('src/*.html', ['index-html']);
+    gulp.watch('src/js/**/*.js', ['babelify-js']);
 });
 
 gulp.task('sass', function () {
@@ -20,15 +29,9 @@ gulp.task('sass', function () {
         .pipe(browserSync.reload({stream: true}))
 });
 
-gulp.task('copy-index-html', function() {
+gulp.task('index-html', function () {
     gulp.src('src/index.html')
         .pipe(gulp.dest('dist'))
-        .pipe(browserSync.reload({stream: true}))
-});
-
-gulp.task('copy-js', function() {
-    gulp.src('src/js/**/*.js')
-        .pipe(gulp.dest('dist/js'))
         .pipe(browserSync.reload({stream: true}))
 });
 
@@ -38,4 +41,11 @@ gulp.task('browserSync', function () {
             baseDir: 'dist'
         }
     })
+});
+
+gulp.task('babelify-js', function () {
+    browserify("src/js/index.js")
+        .transform("babelify", {presets: ["es2015", "react"]})
+        .bundle()
+        .pipe(fs.createWriteStream("dist/js/bundle.js"))
 });
