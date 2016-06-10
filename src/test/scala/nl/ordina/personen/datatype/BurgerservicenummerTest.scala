@@ -5,9 +5,11 @@
 package nl.ordina.personen.datatype
 
 import nl.ordina.personen.ControleRegelException
+import org.scalacheck.Gen
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FunSuite, Matchers}
 
-class BurgerservicenummerTest extends FunSuite with Matchers {
+class BurgerservicenummerTest extends FunSuite with GeneratorDrivenPropertyChecks with Matchers {
 
   val geldigeNummers =
     """881011320 985083906 162470320 703626917 249913987 709548795 936636427 131529572 114845074 363090800 465797118
@@ -26,41 +28,25 @@ class BurgerservicenummerTest extends FunSuite with Matchers {
     geldigeNummers.foreach(n => Burgerservicenummer(n).value == n)
   }
 
-  test("geldige burgerseervicenummers als integer") {
-    geldigeNummers.foreach(n => Burgerservicenummer(n.toInt).value == n)
-  }
-
   test("ongeldige burgerservicenummers") {
     geldigeNummers.map(n => (n.toInt + 7).toString).foreach { n =>
       the[ControleRegelException] thrownBy Burgerservicenummer(n) should have message s"$n moet voldoen aan de elfproef"
     }
   }
 
-  test("ongeldige burgerservicenummers als integer") {
-    geldigeNummers.map(n => n.toInt + 7).foreach { n =>
-      the[ControleRegelException] thrownBy Burgerservicenummer(n) should have message s"$n moet voldoen aan de elfproef"
-        s"burgerservicenummer"
-    }
-  }
-
   test("te kort burgerservicenummer") {
-    the[AssertionError] thrownBy Burgerservicenummer("123") should have message "assertion failed: Een " +
-      "burgerservicenummer heeft negen cijfers; 123 heeft er 3"
+    the[AssertionError] thrownBy Burgerservicenummer("123") should have message
+      "assertion failed: lengte van 123 is 3, maar moet precies 9 zijn"
   }
 
   test("te lang burgerservicenummer") {
-    the[AssertionError] thrownBy Burgerservicenummer("1234567890") should have message "assertion failed: Een " +
-      "burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
+    the[AssertionError] thrownBy Burgerservicenummer("1234567890") should have message
+      "assertion failed: lengte van 1234567890 is 10, maar moet precies 9 zijn"
   }
 
-  test("te kort burgerservicenummer als integer") {
-    val n: Int = 123
-    val s = f"$n%09d"
-    the[ControleRegelException] thrownBy Burgerservicenummer(n) should have message s"$s moet voldoen aan de elfproef"
-  }
+  val generator = Gen.resultOf[Unit, Burgerservicenummer](x => Burgerservicenummer.nieuw)
 
-  test("te lang burgerservicenummer als integer") {
-    the[AssertionError] thrownBy Burgerservicenummer(1234567890) should have message "assertion failed: Een " +
-      "burgerservicenummer heeft negen cijfers; 1234567890 heeft er 10"
+  test("geldig burgerservicenummer") {
+    forAll(generator) { n => Burgerservicenummer(n.value) }
   }
 }
