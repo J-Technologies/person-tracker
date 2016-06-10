@@ -1,5 +1,6 @@
 package nl.ordina.personen.datatype
 
+import nl.ordina.personen.datatype.groep.Geboorte
 import org.scalatest.{FunSuite, Matchers}
 
 class GeboorteTest extends FunSuite with Matchers {

@@ -1,26 +1,19 @@
-/**
-  * Copyright (C) 2016 Ordina
-  */
-
 package nl.ordina.personen.datatype
 
 import nl.ordina.personen.{BRAL0012, controle}
 
-case class Burgerservicenummer(value: String) {
-  assert(
-    value.length == Burgerservicenummer.LENGTE,
-    s"Een burgerservicenummer heeft negen cijfers; $value heeft er ${value.length}"
-  )
+import scala.util.Random
+
+case class Burgerservicenummer(value: String) extends StringMetVasteLengte(value, 9) {
   controle(Burgerservicenummer.elfproef(value), BRAL0012, value)
 }
+
 object Burgerservicenummer {
-  def apply(value: Int): Burgerservicenummer = new Burgerservicenummer(f"$value%09d")
-  val LENGTE: Int = 9
-  val SIGNIFICANTE_LENGTE: Int = 8
-  def elfproef(value: String): Boolean = {
-    val cijfers = value.map(c => c.asDigit)
-    val controlecijfer = cijfers(SIGNIFICANTE_LENGTE)
-    val producten = cijfers.take(SIGNIFICANTE_LENGTE).zipWithIndex.map { case (cijfer, i) => cijfer * (LENGTE - i) }
-    controlecijfer == producten.sum % 11
+  def elfproef(value: String) = som(value.take(8)) == value.last.asDigit
+  def nieuw: Burgerservicenummer = {
+    val value = f"${Random.nextInt(100000000)}%08d"
+    val cd = som(value)
+    if (cd < 10) new Burgerservicenummer(value + cd) else nieuw
   }
+  def som(v: String) = v.map(_.asDigit).zip(9 to 2 by -1).map { case (digit, factor) => digit * factor }.sum % 11
 }
