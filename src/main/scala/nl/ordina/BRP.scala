@@ -33,7 +33,7 @@ object BRP {
   val queueEventHandler = new QueueEventHandler()
 
   def setupAxon() = {
-    new SubscribingEventProcessor(new SimpleEventHandlerInvoker("test", new QueueEventHandler(), queueEventHandler), eventStore).start()
+    new SubscribingEventProcessor(new SimpleEventHandlerInvoker("test", queueEventHandler), eventStore).start()
     new AggregateAnnotationCommandHandler(classOf[NatuurlijkPersoon], repo).subscribe(commandBus)
   }
 
