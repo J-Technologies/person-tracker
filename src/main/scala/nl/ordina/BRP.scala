@@ -26,12 +26,10 @@ object BRP {
   val eventBus = new SimpleEventBus()
   val repo = new EventSourcingRepository[NatuurlijkPersoon](classOf[NatuurlijkPersoon], new CouchbaseEventStore)
 
-  val natuurlijkPeroon: NatuurlijkPersoon = new NatuurlijkPersoon()
-
   def setupAxon() = {
     repo.setEventBus(eventBus)
     AggregateAnnotationCommandHandler.subscribe(classOf[NatuurlijkPersoon], repo, commandBus)
-    AnnotationEventListenerAdapter.subscribe(natuurlijkPeroon, eventBus)
+    AnnotationEventListenerAdapter.subscribe(new LogEventHandlers(), eventBus)
   }
 
   def setupBlazeServer() = {
