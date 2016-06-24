@@ -1,13 +1,13 @@
 import React from "react";
 
-const ViewContent = ({websocketUrl}) => {
+export default ({websocketUrl}) => {
+
+    let outputNode;
 
     let socket = new WebSocket(websocketUrl);
-    socket.onmessage = (msg) => node.innerHTML += msg.data + '\n';
+    socket.onmessage = (msg) => outputNode.innerHTML += msg.data + '\n';
     
     return (
         <pre ref={node => outputNode = node}/>
     )
 };
-
-export default ViewContent;
