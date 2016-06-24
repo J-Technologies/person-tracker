@@ -2,17 +2,16 @@ package nl.ordina
 
 import java.util.concurrent.Executors
 
-import nl.ordina.eventstore.CouchbaseEventStore
 import nl.ordina.personen.command.GeboorteInNederland
 import nl.ordina.personen.datatype._
 import nl.ordina.personen.datatype.groep.Geboorte
 import nl.ordina.personen.domein.entity.NatuurlijkPersoon
-import org.axonframework.commandhandling.SimpleCommandBus
-import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
-import org.axonframework.eventhandling.SimpleEventBus
-import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter
+import org.axonframework.commandhandling.{AggregateAnnotationCommandHandler, SimpleCommandBus}
+import org.axonframework.eventhandling.{SimpleEventHandlerInvoker, SubscribingEventProcessor}
 import org.axonframework.eventsourcing.EventSourcingRepository
+import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
+import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
 import org.http4s.HttpService
 import org.http4s.dsl.{->, /, Root, _}
 import org.http4s.server.blaze.BlazeBuilder
@@ -23,13 +22,12 @@ object BRP {
 
   val commandBus = new SimpleCommandBus()
   val commandGateway = new DefaultCommandGateway(commandBus)
-  val eventBus = new SimpleEventBus()
-  val repo = new EventSourcingRepository[NatuurlijkPersoon](classOf[NatuurlijkPersoon], new CouchbaseEventStore)
+  val eventStore = new EmbeddedEventStore(new InMemoryEventStorageEngine)
+  val repo = new EventSourcingRepository[NatuurlijkPersoon](classOf[NatuurlijkPersoon], eventStore)
 
   def setupAxon() = {
-    repo.setEventBus(eventBus)
-    AggregateAnnotationCommandHandler.subscribe(classOf[NatuurlijkPersoon], repo, commandBus)
-    AnnotationEventListenerAdapter.subscribe(new LogEventHandlers(), eventBus)
+    new SubscribingEventProcessor(new SimpleEventHandlerInvoker("test", new LogEventHandlers()), eventStore).start()
+    new AggregateAnnotationCommandHandler(classOf[NatuurlijkPersoon], repo).subscribe(commandBus)
   }
 
   def setupBlazeServer() = {
@@ -44,8 +42,9 @@ object BRP {
   }
 
   def main(args: Array[String]) {
-    setupAxon()
+    val commandHandlerRegistration = setupAxon()
     setupBlazeServer()
+    commandHandlerRegistration.close()
   }
 
   def createNewGeboorte(): GeboorteInNederland = new GeboorteInNederland(

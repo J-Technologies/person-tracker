@@ -6,11 +6,14 @@ package nl.ordina.example
 
 import nl.ordina.commands.{CreateToDoItemCommand, MarkCompletedCommand}
 import nl.ordina.events.{ToDoItemCompletedEvent, ToDoItemCreatedEvent}
-import org.axonframework.commandhandling.annotation.CommandHandler
-import org.axonframework.eventhandling.annotation.EventHandler
-import org.axonframework.eventsourcing.annotation.{AbstractAnnotatedAggregateRoot, AggregateIdentifier}
+import org.axonframework.commandhandling.CommandHandler
+import org.axonframework.commandhandling.model.AggregateLifecycle.apply
+import org.axonframework.commandhandling.model.AggregateRoot
+import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventsourcing.AggregateIdentifier
 
-class ToDoItem extends AbstractAnnotatedAggregateRoot[String] {
+@AggregateRoot
+class ToDoItem {
 
   @AggregateIdentifier
   private var id: String = _

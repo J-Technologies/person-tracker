@@ -4,18 +4,22 @@
 
 package nl.ordina
 
-import org.axonframework.scynapse.annotations.aggregateId
+import org.axonframework.commandhandling.TargetAggregateIdentifier
+
+import scala.annotation.meta.{field, getter}
 
 package object commands {
 
-  case class CreateToDoItemCommand(@aggregateId todoId: String, description: String)
-  case class MarkCompletedCommand(@aggregateId todoId: String)
+  case class CreateToDoItemCommand(@(TargetAggregateIdentifier@field) todoId: String, description: String)
+
+  case class MarkCompletedCommand(@(TargetAggregateIdentifier@field) todoId: String)
 
 }
 
 package object events {
 
   case class ToDoItemCreatedEvent(todoId: String, description: String)
+
   case class ToDoItemCompletedEvent(todoId: String)
 
 }

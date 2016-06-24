@@ -8,13 +8,12 @@ import java.util.UUID
 import java.util.concurrent.Executors
 
 import nl.ordina.commands.CreateToDoItemCommand
-import nl.ordina.eventstore.CouchbaseEventStore
-import org.axonframework.commandhandling.SimpleCommandBus
-import org.axonframework.commandhandling.annotation.AggregateAnnotationCommandHandler
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
-import org.axonframework.eventhandling.SimpleEventBus
-import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter
+import org.axonframework.commandhandling.{AggregateAnnotationCommandHandler, SimpleCommandBus}
+import org.axonframework.eventhandling.{AnnotationEventListenerAdapter, SimpleEventHandlerInvoker, SubscribingEventProcessor}
 import org.axonframework.eventsourcing.EventSourcingRepository
+import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
+import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
 import org.http4s.HttpService
 import org.http4s.dsl._
 import org.http4s.server.blaze.BlazeBuilder
@@ -31,15 +30,14 @@ object Example {
 
   val commandBus = new SimpleCommandBus()
   val commandGateway = new DefaultCommandGateway(commandBus)
-  val eventBus = new SimpleEventBus()
-  val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], new CouchbaseEventStore)
+  val eventStore = new EmbeddedEventStore(new InMemoryEventStorageEngine)
+  val repo = new EventSourcingRepository[ToDoItem](classOf[ToDoItem], eventStore)
 
   val testHandler: ToDoEventHandler = new ToDoEventHandler()
 
   def setupAxon() = {
-    repo.setEventBus(eventBus)
-    AggregateAnnotationCommandHandler.subscribe(classOf[ToDoItem], repo, commandBus)
-    AnnotationEventListenerAdapter.subscribe(testHandler, eventBus)
+    new SubscribingEventProcessor(new SimpleEventHandlerInvoker("test", testHandler), eventStore).start()
+    new AggregateAnnotationCommandHandler(classOf[ToDoItem], repo).subscribe(commandBus)
   }
 
   def setupBlazeServer() = {
@@ -57,13 +55,14 @@ object Example {
   }
 
   val somePolling: Process[Task, Text] = time.awakeEvery(1 seconds).map(d => {
-    if(testHandler.queue.nonEmpty) {
+    if (testHandler.queue.nonEmpty) {
       Text("Dequeued message -> " + testHandler.queue.dequeue())
     } else Text("Dequeued message -> nothing new")
   })
 
   def main(args: Array[String]) {
-    setupAxon()
+    val commandHandlerRegistration = setupAxon()
     setupBlazeServer()
+    commandHandlerRegistration.close()
   }
 }

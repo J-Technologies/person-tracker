@@ -11,12 +11,12 @@ import nl.ordina.personen.datatype.SoortPersoon.INGESCHREVENE
 import nl.ordina.personen.datatype._
 import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
 import nl.ordina.personen.event.{PersoonGeboren, PersoonOverleden}
-import org.axonframework.commandhandling.annotation.CommandHandler
-import org.axonframework.eventsourcing.annotation.{AbstractAnnotatedAggregateRoot, AggregateIdentifier,
-EventSourcingHandler}
+import org.axonframework.commandhandling.CommandHandler
+import org.axonframework.commandhandling.model.{AggregateLifecycle, AggregateRoot}
+import org.axonframework.eventsourcing.{AggregateIdentifier, EventSourcingHandler}
 
-abstract class Persoon(val soortPersoon: SoortPersoon) extends
-  AbstractAnnotatedAggregateRoot[Burgerservicenummer]
+@AggregateRoot
+abstract class Persoon(val soortPersoon: SoortPersoon)
 
 class NatuurlijkPersoon extends Persoon(INGESCHREVENE) {
   @AggregateIdentifier
@@ -31,7 +31,7 @@ class NatuurlijkPersoon extends Persoon(INGESCHREVENE) {
   @CommandHandler
   def this(command: GeboorteInNederland) = {
     this()
-    apply(
+    AggregateLifecycle.apply(
       PersoonGeboren(
         command.burgerservicenummer,
         command.naam,
@@ -48,7 +48,7 @@ class NatuurlijkPersoon extends Persoon(INGESCHREVENE) {
       throw new IllegalStateException(
         s"Persoon met burgerservicenummer ${command.burgerservicenummer} is reeds overleden"
       )
-    apply(PersoonOverleden(command.burgerservicenummer, command.overlijden))
+    AggregateLifecycle.apply(PersoonOverleden(command.burgerservicenummer, command.overlijden))
   }
 
   @EventSourcingHandler

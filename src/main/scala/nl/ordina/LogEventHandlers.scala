@@ -1,7 +1,7 @@
 package nl.ordina
 
 import nl.ordina.personen.event.{PersoonGeboren, PersoonOverleden}
-import org.axonframework.eventhandling.annotation.EventHandler
+import org.axonframework.eventhandling.EventHandler
 
 class LogEventHandlers {
 

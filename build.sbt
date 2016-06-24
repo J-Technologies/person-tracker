@@ -4,8 +4,8 @@ scalaVersion := "2.11.8"
 
 //Axon deps
 libraryDependencies ++= Seq(
-  "org.axonframework.scynapse"  % "scynapse-core_2.11"  % "0.5.5",
-  "joda-time"                   % "joda-time"           % "2.8.1"
+  "org.axonframework"           % "axon-core"  % "3.0-M1",
+  "joda-time"                   % "joda-time"  % "2.8.1"
 )
 
 //Server deps
@@ -18,12 +18,14 @@ libraryDependencies ++= Seq(
 //Test deps
 libraryDependencies ++= Seq(
   "org.scalatest"               %% "scalatest"          % "2.2.6" % "test",
-  "org.axonframework.scynapse"  % "scynapse-test_2.11"  % "0.5.5" % "test"
+  "org.axonframework"           % "axon-test"           % "3.0-M1",
+  "org.hamcrest"                % "hamcrest-core"           % "1.3"
 )
 
 
 //Couchbase deps
 resolvers += "ReactiveCouchbase Releases" at "https://raw.github.com/ReactiveCouchbase/repository/master/releases/"
+resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 libraryDependencies ++= Seq(
   "org.reactivecouchbase" %% "reactivecouchbase-core" % "0.3"
 )

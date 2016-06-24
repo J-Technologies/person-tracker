@@ -5,7 +5,7 @@
 package nl.ordina.example
 
 import nl.ordina.events._
-import org.axonframework.eventhandling.annotation.EventHandler
+import org.axonframework.eventhandling.EventHandler
 
 import scala.collection.mutable
 
