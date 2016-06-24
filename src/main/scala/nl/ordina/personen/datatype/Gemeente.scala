@@ -35,3 +35,5 @@ object Gemeente {
 
 case class Gemeentecode(value: String) extends StringMetBeperkteLengte(value, 4)
 case class Gemeentenaam(value: String) extends StringMetBeperkteLengte(value, 80)
+
+
