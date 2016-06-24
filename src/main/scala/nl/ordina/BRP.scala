@@ -15,6 +15,12 @@ import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageE
 import org.http4s.HttpService
 import org.http4s.dsl.{->, /, Root, _}
 import org.http4s.server.blaze.BlazeBuilder
+import org.http4s.server.websocket._
+import org.http4s.websocket.WebsocketBits.Text
+
+import scala.concurrent.duration._
+import scalaz.concurrent.Task
+import scalaz.stream.{Exchange, Process, time}
 
 object BRP {
 
@@ -24,9 +30,10 @@ object BRP {
   val commandGateway = new DefaultCommandGateway(commandBus)
   val eventStore = new EmbeddedEventStore(new InMemoryEventStorageEngine)
   val repo = new EventSourcingRepository[NatuurlijkPersoon](classOf[NatuurlijkPersoon], eventStore)
+  val queueEventHandler = new QueueEventHandler()
 
   def setupAxon() = {
-    new SubscribingEventProcessor(new SimpleEventHandlerInvoker("test", new LogEventHandlers()), eventStore).start()
+    new SubscribingEventProcessor(new SimpleEventHandlerInvoker("test", new LogEventHandlers(), queueEventHandler), eventStore).start()
     new AggregateAnnotationCommandHandler(classOf[NatuurlijkPersoon], repo).subscribe(commandBus)
   }
 
@@ -34,12 +41,19 @@ object BRP {
     BlazeBuilder.bindHttp(8123)
       .mountService(
         HttpService {
+          case GET -> Root / "websocket" => WS(Exchange(somePolling, Process.halt))
           case GET -> Root / "geboorte" =>
             commandGateway.send(createNewGeboorte())
             Ok("Geboorte commando received")
         }, "/persoon"
       ).run.awaitShutdown
   }
+
+  val somePolling: Process[Task, Text] = time.awakeEvery(1 seconds).map(d => {
+    if (queueEventHandler.queue.nonEmpty) {
+      Text("Dequeued message -> " + queueEventHandler.queue.dequeue())
+    } else Text("Dequeued message -> nothing new")
+  })
 
   def main(args: Array[String]) {
     val commandHandlerRegistration = setupAxon()
