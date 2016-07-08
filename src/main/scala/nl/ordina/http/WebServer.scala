@@ -2,6 +2,8 @@ package nl.ordina.http
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.model.headers.`Access-Control-Allow-Origin`
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
@@ -63,6 +65,10 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
             formFieldMap { fields =>
               commandGateway.sendAndWait(createNewGeboorte(fields.getOrElse("voornaam", ""), fields.getOrElse("achternaam", "")))
               complete("Geboorte commando received")
+
+                complete(HttpResponse()
+                  .withEntity("Geboorte commando received")
+                  .withHeaders(`Access-Control-Allow-Origin` *))
             }
           }
         } ~
