@@ -1,4 +1,7 @@
 import React from "react";
+import InputField from "./form/InputField";
+import RadioButtonField from "./form/RadioButtonField";
+import SubmitButton from "./form/SubmitButton";
 
 export default () => {
 
@@ -11,68 +14,31 @@ export default () => {
 
     return (
         <div>
-            <h1>Creeër een Natuurlijk persoon</h1>
+            <h1>Schrijf een natuurlijk persoon in</h1>
             <hr/>
             <form className="form-horizontal" id="createPerson" onSubmit={
                 e => {
                     e.preventDefault();
                     postCreateNaturalPerson();
             }}>
-                <div className="form-group">
-                    <label for="voornaam" className="col-sm-2 control-label">Voornaam</label>
-                    <div className="col-sm-10">
-                        <input type="text" className="form-control" name="voornaam" id="voornaam"
-                               placeholder="Voornaam"/>
-                    </div>
-                </div>
 
-                <div className="form-group">
-                    <label for="achternaam" className="col-sm-2 control-label">Achternaam</label>
-                    <div className="col-sm-10">
-                        <input type="text" className="form-control" name="achternaam" id="achternaam"
-                               placeholder="Achternaam"/>
-                    </div>
-                </div>
+                <InputField id="voornaam" label="Voornaam"/>
 
-                <div className="form-group">
-                    <label for="radio1" className="col-sm-2 control-label">Geslacht</label>
-                    <div className="col-sm-10">
+                <InputField id="achternaam" label="Achternaam"/>
 
-                        <div className="radio">
-                            <label>
-                                <input type="radio" name="geslacht" id="onbekend" defaultValue="onbekend"
-                                       defaultChecked={true}/>
-                                Onbekend
-                            </label>
-                        </div>
-                        <div className="radio">
-                            <label>
-                                <input type="radio" name="geslacht" id="vrouw" defaultValue="vrouw"/>
-                                Vrouw
-                            </label>
-                        </div>
-                        <div className="radio">
-                            <label for="man">
-                                <input type="radio" name="geslacht" id="man" defaultValue="man"/>
-                                Man</label>
-                        </div>
-                    </div>
-                </div>
+                <RadioButtonField name="geslacht"
+                                  label="Gelacht"
+                                  buttons={[
+                                    {id: 'onbekend', label: 'Onbekend'},
+                                    {id: 'vrouw', label: 'Vrouw'},
+                                    {id: 'man', label: 'Man'}
+                                  ]}/>
 
-                <div className="form-group">
-                    <label for="geboortedatum" className="col-sm-2 control-label">Geboortedatum</label>
-                    <div className="col-sm-10">
-                        <input type="date" id="geboortedatum" className="form-control"/>
-                    </div>
-                </div>
+                <InputField id="geboortedatum" label="Geboortedatum" type="date"/>
 
                 <input name="partij" type="hidden" value="000505"/>
 
-                <div className="form-group">
-                    <div className="col-sm-offset-2 col-sm-10">
-                        <button type="submit" className="btn btn-default">Opslaan</button>
-                    </div>
-                </div>
+                <SubmitButton />
             </form>
         </div>
     )
