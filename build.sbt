@@ -32,11 +32,5 @@ libraryDependencies ++= Seq(
   "org.hamcrest"                % "hamcrest-core"        % "1.3"
 )
 
-//Couchbase deps
-resolvers += "ReactiveCouchbase Releases" at "https://raw.github.com/ReactiveCouchbase/repository/master/releases/"
-libraryDependencies ++= Seq(
-  "org.reactivecouchbase" %% "reactivecouchbase-core" % "0.3"
-)
-
 libraryDependencies += "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.7.3"
 libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.5" % "test"
