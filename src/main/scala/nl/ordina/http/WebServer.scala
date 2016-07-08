@@ -32,11 +32,16 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
   val eventSink: Sink[Message, Any] = Sink.foreach(println)
   val eventFlow: Flow[Message, Message, Any] = Flow.fromSinkAndSource(eventSink, eventSource)
 
+  val echoService: Flow[Message, Message, _] = Flow[Message].map {
+    case TextMessage.Strict(txt) => TextMessage("ECHO: " + txt)
+    case _ => TextMessage("Message type unsupported")
+  }
+
   def start() = {
 
     val interface = "localhost"
     val port = 8123
-    val bindingFuture = Http().bindAndHandle(mainRoute, interface, port)
+    val bindingFuture = Http().bindAndHandle(route, interface, port)
 
     println(s"Server is now online at http://$interface:$port/\nPress RETURN to stop...")
     StdIn.readLine() // let it run until user presses return
@@ -46,36 +51,26 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
     println("Server is down...")
   }
 
-  val echoService: Flow[Message, Message, _] = Flow[Message].map {
-    case TextMessage.Strict(txt) => TextMessage("ECHO: " + txt)
-    case _ => TextMessage("Message type unsupported")
-  }
-
-  def mainRoute: Route = welcomeRoute ~ echoRoute ~ persoonRoute
-
-  def welcomeRoute: Route = pathEndOrSingleSlash {
-    complete("Welcome to websocket server")
-  }
-
-  def echoRoute: Route = path("ws-echo") {
-    get {
-      handleWebSocketMessages(echoService)
-    }
-  }
-
-  def persoonRoute: Route = {
-//    path("persoon") {
-      path("geboorte") {
+  def route: Route =
+    pathEndOrSingleSlash {
+      complete("Welcome to websocket server")
+    } ~
+      path("ws-echo") {
         get {
-          commandGateway.sendAndWait(createNewGeboorte())
-          complete("Geboorte commando received")
+          handleWebSocketMessages(echoService)
         }
       } ~
-      path("websocket") {
-        handleWebSocketMessages(eventFlow)
+      pathPrefix("persoon") {
+        path("geboorte") {
+          get {
+            commandGateway.sendAndWait(createNewGeboorte())
+            complete("Geboorte commando received")
+          }
+        } ~
+          path("websocket") {
+            handleWebSocketMessages(eventFlow)
+          }
       }
-//    }
-  }
 
   def createNewGeboorte(): GeboorteInNederland = new GeboorteInNederland(
     Burgerservicenummer.nieuw,
