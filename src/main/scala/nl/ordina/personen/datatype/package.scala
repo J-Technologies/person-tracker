@@ -24,6 +24,13 @@ package object datatype {
 
   sealed abstract class Geslachtsaanduiding(val code: String, val naam: String)
   object Geslachtsaanduiding {
+
+    def fromString(geslacht: String):Geslachtsaanduiding = geslacht match {
+      case "man" => MAN
+      case "vrouw" => VROUW
+      case "onbekend" => ONBEKEND
+    }
+
     case object MAN extends Geslachtsaanduiding("M", "Man")
     case object VROUW extends Geslachtsaanduiding("V", "Vrouw")
     case object ONBEKEND extends Geslachtsaanduiding("O", "Onbekend")

@@ -36,8 +36,9 @@ export default () => {
 
                 <InputField id="geboortedatum" label="Geboortedatum" type="date"/>
 
+                <input name="gemeente" type="hidden" value="0505"/>
                 <input name="partij" type="hidden" value="000505"/>
-
+                
                 <SubmitButton />
             </form>
         </div>

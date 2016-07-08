@@ -18,8 +18,8 @@ De implementatie is gebaseerd op CQRS en Event Sourcing, met behulp van het
 Het doel van dit speerpunt is te laten zien dat CQRS/Event Sourcing een bij
 uitstek geschikt architectuurpatroon is voor een basisregistratie. Event
 Sourcing maakt het makkelijk om
-- alle wijzigingen die hebben geleid tot de
-huidige toestand te bewaren
+
+- alle wijzigingen die hebben geleid tot de huidige toestand te bewaren
 - de toestand op een willekeurig tijdstip in het verleden te reconstrueren
 - het verleden te corrigeren op basis van nieuwe informatie, en
 - gegevens over personen vanuit verschillende gezichtspunten anders weer te geven.

@@ -63,7 +63,16 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
         path("geboorte") {
           post {
             formFieldMap { fields =>
-              commandGateway.sendAndWait(createNewGeboorte(fields.getOrElse("voornaam", ""), fields.getOrElse("achternaam", "")))
+              commandGateway.sendAndWait(
+                createNewGeboorte(
+                  fields.getOrElse("voornaam", ""),
+                  fields.getOrElse("achternaam", ""),
+                  fields.getOrElse("geboortedatum", ""),
+                  Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
+                  fields.getOrElse("gemeente", ""),
+                  fields.getOrElse("partij", "")
+              ))
+
               complete(HttpResponse()
                 .withEntity("Geboorte commando received")
                 .withHeaders(`Access-Control-Allow-Origin` *))
@@ -75,11 +84,11 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
           }
       }
 
-  def createNewGeboorte(voornaam: String, achternaam: String): GeboorteInNederland = new GeboorteInNederland(
+  def createNewGeboorte(voornaam: String, achternaam: String, geboortedatum: String, geslacht: Geslachtsaanduiding, gemeente: String, partij: String): GeboorteInNederland = new GeboorteInNederland(
     Burgerservicenummer.nieuw,
     SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
-    Geslachtsaanduiding.MAN,
-    Geboorte(Datum("1993-01-01"), Gemeente("0505")),
-    Partij("000505")
+    geslacht,
+    Geboorte(Datum(geboortedatum), Gemeente(gemeente)),
+    Partij(partij)
   )
 }
