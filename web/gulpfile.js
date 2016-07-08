@@ -9,7 +9,7 @@ if (!fs.existsSync('dist')){
     fs.mkdirSync('dist');
 }
 
-gulp.task('default', ['watch'], function () {
+gulp.task('default', ['vendor-css', 'watch'], function () {
     // place code for your default task here
 });
 
@@ -31,6 +31,11 @@ gulp.task('index-html', function () {
     gulp.src('src/index.html')
         .pipe(gulp.dest('dist'))
         .pipe(browserSync.reload({stream: true}))
+});
+
+gulp.task('vendor-css', function () {
+    gulp.src('src/scss/vendor/*.css')
+        .pipe(gulp.dest('dist/css/vendor'))
 });
 
 gulp.task('browserSync', function () {

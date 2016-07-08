@@ -8,6 +8,9 @@ export default ({websocketUrl}) => {
     socket.onmessage = (msg) => outputNode.innerHTML += msg.data + '\n';
     
     return (
-        <pre ref={node => outputNode = node}/>
+        <div>
+            <h1>Messages received</h1>
+            <pre ref={node => outputNode = node}/>
+        </div>
     )
 };
