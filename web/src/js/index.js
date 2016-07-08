@@ -7,7 +7,7 @@ import CreateNaturalPerson from "./CreateNaturalPerson";
 ReactDOM.render(
     <div>
         <HeaderNav title="BRP">
-            <li className="active">Creeër persoon</li>
+            <li className="active"><a href="#">Creeër persoon</a></li>
         </HeaderNav>
         <CreateNaturalPerson />
         <Output websocketUrl="ws://localhost:8123/persoon/websocket"/>
