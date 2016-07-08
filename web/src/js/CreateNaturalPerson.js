@@ -1,28 +1,36 @@
 import React from "react";
 
 export default () => {
+
+    const postCreateNaturalPerson = () => fetch("http://localhost:8123/persoon/geboorte", {
+        method: 'post',
+        body: new FormData(document.getElementById('createPerson'))
+    })
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+
     return (
         <div>
             <h1>Creeër een Natuurlijk persoon</h1>
             <hr/>
-            <form className="form-horizontal" onSubmit={
+            <form className="form-horizontal" id="createPerson" onSubmit={
                 e => {
                     e.preventDefault();
-                    fetch("http://localhost:8123/persoon/geboorte", {method: 'get'})
-                        .then(response => console.log(response))
-                        .catch(err => console.log(err))
+                    postCreateNaturalPerson();
             }}>
                 <div className="form-group">
                     <label for="voornaam" className="col-sm-2 control-label">Voornaam</label>
                     <div className="col-sm-10">
-                        <input type="text" className="form-control" id="voornaam" placeholder="Voornaam"/>
+                        <input type="text" className="form-control" name="voornaam" id="voornaam"
+                               placeholder="Voornaam"/>
                     </div>
                 </div>
 
                 <div className="form-group">
                     <label for="achternaam" className="col-sm-2 control-label">Achternaam</label>
                     <div className="col-sm-10">
-                        <input type="text" className="form-control" id="achternaam" placeholder="Achternaam"/>
+                        <input type="text" className="form-control" name="achternaam" id="achternaam"
+                               placeholder="Achternaam"/>
                     </div>
                 </div>
 
