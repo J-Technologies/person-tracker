@@ -64,11 +64,9 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
           post {
             formFieldMap { fields =>
               commandGateway.sendAndWait(createNewGeboorte(fields.getOrElse("voornaam", ""), fields.getOrElse("achternaam", "")))
-              complete("Geboorte commando received")
-
-                complete(HttpResponse()
-                  .withEntity("Geboorte commando received")
-                  .withHeaders(`Access-Control-Allow-Origin` *))
+              complete(HttpResponse()
+                .withEntity("Geboorte commando received")
+                .withHeaders(`Access-Control-Allow-Origin` *))
             }
           }
         } ~
