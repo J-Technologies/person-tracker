@@ -5,7 +5,7 @@ export default ({id, label = "", type = "text"}) => {
     return (
         <div className="form-group">
             
-            <label for={id} className="col-sm-2 control-label">{label}</label>
+            <label htmlFor={id} className="col-sm-2 control-label">{label}</label>
             
             <div className="col-sm-10">
                 
