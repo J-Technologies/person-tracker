@@ -18,15 +18,12 @@ import org.axonframework.eventsourcing.eventstore.EventStore
 import scala.concurrent.duration._
 import scala.io.StdIn
 
-/**
-  * Created by gle21221 on 8-7-2016.
-  */
 class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
 
   implicit val system = ActorSystem("webapi")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
-  implicit val timeout = Timeout(1000 millis)
+  implicit val timeout = Timeout(1 second)
 
   val eventSource: Source[Message, Any] = Source.actorPublisher[Message](EventHandlerActor.props(eventStore))
   val eventSink: Sink[Message, Any] = Sink.foreach(println)
@@ -62,9 +59,11 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
       } ~
       pathPrefix("persoon") {
         path("geboorte") {
-          get {
-            commandGateway.sendAndWait(createNewGeboorte())
-            complete("Geboorte commando received")
+          post {
+            formFieldMap { fields =>
+              commandGateway.sendAndWait(createNewGeboorte(fields.getOrElse("voornaam", ""), fields.getOrElse("achternaam", "")))
+              complete("Geboorte commando received")
+            }
           }
         } ~
           path("websocket") {
@@ -72,9 +71,9 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
           }
       }
 
-  def createNewGeboorte(): GeboorteInNederland = new GeboorteInNederland(
+  def createNewGeboorte(voornaam: String, achternaam: String): GeboorteInNederland = new GeboorteInNederland(
     Burgerservicenummer.nieuw,
-    SamengesteldeNaam(Voornamen("Dirk"), Geslachtsnaam(Geslachtsnaamstam("Luijk"))),
+    SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
     Geslachtsaanduiding.MAN,
     Geboorte(Datum("1993-01-01"), Gemeente("0505")),
     Partij("000505")
