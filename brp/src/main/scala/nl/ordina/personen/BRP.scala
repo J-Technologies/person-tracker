@@ -28,7 +28,7 @@ object BRP {
     val commandHandler = new AggregateAnnotationCommandHandler(classOf[NatuurlijkPersoon], repository)
     val commandHandlerRegistration = commandHandler.subscribe(commandBus)
 
-    new WebServer(commandGateway).start()
+    WebServer(commandGateway).start()
     commandHandlerRegistration.close()
   }
 }

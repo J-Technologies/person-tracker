@@ -17,8 +17,8 @@ libraryDependencies ++= Seq(
 
 //Server deps
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-http-experimental" % "2.4.7",
-  "com.typesafe.akka" %% "akka-stream-experimental" % "2.0.4"
+  "com.typesafe.akka" %% "akka-stream" % "2.4.7",
+  "com.typesafe.akka" %% "akka-http-experimental" % "2.4.7"
 )
 
 //Test deps

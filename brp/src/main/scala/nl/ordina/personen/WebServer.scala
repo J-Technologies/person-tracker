@@ -97,3 +97,7 @@ class WebServer(commandGateway: CommandGateway) {
       Partij(partij)
     )
 }
+
+object WebServer {
+  def apply(commandGateway: CommandGateway): WebServer = new WebServer(commandGateway)
+}
