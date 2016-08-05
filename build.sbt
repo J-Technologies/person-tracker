@@ -7,3 +7,5 @@ lazy val event = project.dependsOn(datatype)
 lazy val brp = project.dependsOn(event)
 lazy val json = project.dependsOn(event)
 lazy val soap = project.dependsOn(event)
+
+run in Compile <<= (run in Compile in brp)
