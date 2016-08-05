@@ -2,13 +2,13 @@ package nl.ordina.personen.handlers.soap
 
 import nl.ordina.personen.event
 import nl.ordina.personen.event.{PersoonGeboren, PersoonOverleden}
-import org.axonframework.eventhandling.{EventHandler, SimpleEventHandlerInvoker, SubscribingEventProcessor}
+import org.axonframework.eventhandling.{EventHandler, SimpleEventHandlerInvoker, TrackingEventProcessor}
 
 import scala.collection.mutable
 
 class SoapEventHandler {
 
-  val eventProcessor = new SubscribingEventProcessor(new SimpleEventHandlerInvoker("queue", this), event.eventStore)
+  val eventProcessor = new TrackingEventProcessor("soap", new SimpleEventHandlerInvoker(this), event.eventStore, event.tokenStore)
   val queue = new mutable.Queue[String]()
 
   eventProcessor.start()
@@ -21,5 +21,11 @@ class SoapEventHandler {
   @EventHandler
   def handle(event: PersoonOverleden) {
     queue += s"PersoonOverleden: ${event.bsn}"
+  }
+}
+
+object SoapEventHandler {
+  def main(args: Array[String]) {
+    new SoapEventHandler()
   }
 }

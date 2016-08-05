@@ -12,8 +12,8 @@ import nl.ordina.personen.datatype._
 import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
 import nl.ordina.personen.event.{PersoonGeboren, PersoonOverleden}
 import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.commandhandling.model.{AggregateLifecycle, AggregateRoot}
-import org.axonframework.eventsourcing.{AggregateIdentifier, EventSourcingHandler}
+import org.axonframework.commandhandling.model.{AggregateIdentifier, AggregateLifecycle, AggregateRoot}
+import org.axonframework.eventsourcing.EventSourcingHandler
 
 @AggregateRoot
 abstract class Persoon(val soortPersoon: SoortPersoon)
