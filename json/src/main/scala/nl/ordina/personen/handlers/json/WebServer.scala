@@ -4,7 +4,9 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
+import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.headers.`Access-Control-Allow-Origin`
+import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
@@ -43,7 +45,10 @@ class WebServer(jsonRepository: JsonRepository) extends Protocols {
       pathPrefix("persoon") {
         (get & path(Segment)) { bsn =>
           respondWithHeaders(`Access-Control-Allow-Origin` *) {
-            complete(ToResponseMarshallable(jsonRepository.select(bsn)))
+            jsonRepository.select(bsn) match {
+              case Some(person) => complete(ToResponseMarshallable(person))
+              case None => complete(HttpResponse(NotFound))
+            }
           }
         }
       }

@@ -20,10 +20,10 @@ class JsonEventHandler(jsonRepository: JsonRepository) {
   }
 
   @EventHandler
-  def handle(event: PersoonOverleden) {
-    val entry = jsonRepository.select(event.bsn.value)
-    jsonRepository.store(PersoonEntry(entry.bsn, entry.naam, isOverleden = true))
-  }
+  def handle(event: PersoonOverleden): Unit = jsonRepository.select(event.bsn.value) match {
+      case Some(person) => jsonRepository.store(PersoonEntry(person.bsn, person.naam, isOverleden = true))
+      case None => throw new Error("person not found")
+    }
 }
 
 object JsonEventHandler {

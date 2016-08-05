@@ -10,6 +10,12 @@ export default class SearchNaturalPerson extends Component {
         this.state = {results: []};
     }
 
+    searchPerson(bsn) {
+        fetch("http://localhost:8124/persoon/" + document.getElementById('bsn').value)
+            .then(response => response.json())
+            .then(result => this.setState({results: [result]}));
+    }
+
     render() {
         const {results}= this.state;
 
@@ -19,9 +25,9 @@ export default class SearchNaturalPerson extends Component {
                 <form className="form-horizontal" id="searchPerson" onSubmit={
                     e => {
                         e.preventDefault();
-                        fetch("http://localhost:8124/persoon/" + document.getElementById('bsn').value)
-                            .then(response => response.json())
-                            .then(result => this.setState({results: [result]}));
+                        if (document.getElementById('bsn').value !== '') {
+                            this.searchPerson(document.getElementById('bsn').value)
+                        }
                     }}>
                     <InputField id="bsn" label="BSN nummer"/>
 
@@ -44,7 +50,7 @@ export default class SearchNaturalPerson extends Component {
                             <tr key={person.bsn}>
                                 <td>{person.bsn}</td>
                                 <td>{person.naam}</td>
-                                <td>{person.isOverleden ? 'Ja': 'Nee'}</td>
+                                <td>{person.isOverleden ? 'Ja' : 'Nee'}</td>
                             </tr>
                         )}
                         </tbody>
