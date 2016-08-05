@@ -4,8 +4,13 @@ export default ({websocketUrl}) => {
 
     let outputNode;
 
-    let socket = new WebSocket(websocketUrl);
-    socket.onmessage = msg => outputNode.innerHTML += msg.data + '\n';
+    const createSocket = () => {
+        let socket = new WebSocket(websocketUrl);
+        socket.onmessage = msg => outputNode.innerHTML += msg.data + '\n';
+        socket.onerror = err => setTimeout(createSocket, 10000);
+    };
+
+    createSocket();
 
     const switchVisible = node => node.style.display === 'none' ? node.style.display = 'block' : node.style.display = 'none';
 
