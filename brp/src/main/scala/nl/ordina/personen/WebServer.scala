@@ -15,14 +15,13 @@ import nl.ordina.personen.datatype.groep.Geboorte
 import nl.ordina.personen.datatype.{Datum, Gemeente, Geslachtsaanduiding, Partij, _}
 import nl.ordina.personen.handlers.EventHandlerActor
 import org.axonframework.commandhandling.gateway.CommandGateway
-import org.axonframework.eventsourcing.eventstore.EventStore
 
 import scala.concurrent.duration._
 import scala.io.StdIn
 
 class WebServer(commandGateway: CommandGateway) {
 
-  implicit val system = ActorSystem("webapi")
+  implicit val system = ActorSystem("brp")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
   implicit val timeout = Timeout(1 second)
