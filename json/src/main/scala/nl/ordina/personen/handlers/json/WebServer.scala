@@ -17,7 +17,7 @@ trait Protocols extends DefaultJsonProtocol {
 
 class WebServer(jsonRepository: JsonRepository) extends Protocols {
 
-  implicit val system = ActorSystem("webapi")
+  implicit val system = ActorSystem("json")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
 
@@ -44,7 +44,7 @@ class WebServer(jsonRepository: JsonRepository) extends Protocols {
           complete(ToResponseMarshallable(jsonRepository.select(bsn)))
         }
       }
-} f
+}
 
 object WebServer {
   def apply(jsonRepository: JsonRepository): WebServer = new WebServer(jsonRepository)
