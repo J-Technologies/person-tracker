@@ -16,12 +16,13 @@ class JsonEventHandler(jsonRepository: JsonRepository) {
 
   @EventHandler
   def handle(event: PersoonGeboren): Unit = {
-    jsonRepository.store(PersoonEntry(event.bsn.value, isOverleden = false))
+    jsonRepository.store(PersoonEntry(event.bsn.value, event.naam.toString, isOverleden = false))
   }
 
   @EventHandler
   def handle(event: PersoonOverleden) {
-    jsonRepository.store(PersoonEntry(event.bsn.value, isOverleden = true))
+    val entry = jsonRepository.select(event.bsn.value)
+    jsonRepository.store(PersoonEntry(entry.bsn, entry.naam, isOverleden = true))
   }
 }
 

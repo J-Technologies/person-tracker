@@ -9,7 +9,7 @@ import org.axonframework.common.transaction.TransactionManager
 class JsonRepository(entityManagerProvider: EntityManagerProvider, transactionManager: TransactionManager) {
   def select(bsn: String): PersoonEntry =
     entityManagerProvider.getEntityManager.createQuery(
-      "SELECT NEW nl.ordina.personen.handlers.json.PersoonEntry(bsn, isOverleden) " +
+      "SELECT NEW nl.ordina.personen.handlers.json.PersoonEntry(bsn, naam, isOverleden) " +
         "FROM " + persoonEntryName + " WHERE bsn = :bsn",
       classOf[PersoonEntry])
       .setParameter("bsn", bsn)

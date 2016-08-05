@@ -12,7 +12,7 @@ import spray.json.DefaultJsonProtocol
 import scala.io.StdIn
 
 trait Protocols extends DefaultJsonProtocol {
-  implicit val persoonEntryFormat = jsonFormat2(PersoonEntry.apply)
+  implicit val persoonEntryFormat = jsonFormat3(PersoonEntry.apply)
 }
 
 class WebServer(jsonRepository: JsonRepository) extends Protocols {
