@@ -15,7 +15,7 @@ export default class App extends Component {
         }
     }
 
-    renderView(menu) {
+    static renderView(menu) {
         switch(menu) {
             case "Creeër persoon":
                 return <CreateNaturalPerson />;
@@ -42,7 +42,7 @@ export default class App extends Component {
                     }
                 </HeaderNav>
 
-                {this.renderView(active)}
+                {App.renderView(active)}
 
                 <Output websocketUrl="ws://localhost:8123/persoon/websocket"/>
 
