@@ -5,12 +5,19 @@ export default ({websocketUrl}) => {
     let outputNode;
 
     let socket = new WebSocket(websocketUrl);
-    socket.onmessage = (msg) => outputNode.innerHTML += msg.data + '\n';
-    
+    socket.onmessage = msg => outputNode.innerHTML += msg.data + '\n';
+
+    const switchVisible = node => node.style.display === 'none' ? node.style.display = 'block' : node.style.display = 'none';
+
     return (
-        <div>
-            <h1>Messages received</h1>
-            <pre ref={node => outputNode = node}/>
+        <div className="logging-output">
+            <div className="container" onClick={() => switchVisible(outputNode)}>
+
+                <h4>Show Logging +</h4>
+
+                <pre ref={node => outputNode = node}/>
+
+            </div>
         </div>
     )
 };

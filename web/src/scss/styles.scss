@@ -2,5 +2,24 @@
   margin-top:50px;
 }
 
+.logging-output {
+  position: absolute;
+  bottom: 0;
+
+  h4 {
+    text-align: right;
+
+    &:hover {
+      color: #6664ff;
+    }
+  }
+
+
+  pre {
+    display: none;
+  }
+}
+
+
 @import "vendor/bootstrap.min.css";
 @import "vendor/bootstrap-theme.min.css";
