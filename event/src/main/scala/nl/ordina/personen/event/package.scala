@@ -11,13 +11,13 @@ import org.axonframework.serialization.xml.XStreamSerializer
 
 package object event {
 
-  val entityManagerFactory = Persistence.createEntityManagerFactory("Axon")
-  val entityManagerProvider = new SimpleEntityManagerProvider(entityManagerFactory.createEntityManager())
-  val transactionManager = new JpaTransactionManager(entityManagerProvider)
-  val eventStorageEngine = new JpaEventStorageEngine(entityManagerProvider, transactionManager) {
+  private lazy val entityManagerFactory = Persistence.createEntityManagerFactory("Axon")
+  private lazy val entityManagerProvider = new SimpleEntityManagerProvider(entityManagerFactory.createEntityManager())
+  lazy val transactionManager = new JpaTransactionManager(entityManagerProvider)
+  lazy val eventStorageEngine = new JpaEventStorageEngine(entityManagerProvider, transactionManager) {
     setSerializer(new XStreamSerializer())
   }
-  val eventStore = new EmbeddedEventStore(eventStorageEngine)
+  lazy val eventStore = new EmbeddedEventStore(eventStorageEngine)
 
   case class PersoonGeboren(
     bsn: Burgerservicenummer,

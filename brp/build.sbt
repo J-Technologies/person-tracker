@@ -7,6 +7,7 @@ resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/
 
 //Axon deps
 libraryDependencies ++= Seq(
+  "org.apache.derby" % "derbynet" % "10.11.1.1",
   "joda-time" % "joda-time" % "2.8.1",
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.7.3",
   "org.hibernate" % "hibernate-validator" % "5.2.4.Final"

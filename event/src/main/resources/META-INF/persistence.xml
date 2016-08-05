@@ -7,8 +7,8 @@
         <class>org.axonframework.eventsourcing.eventstore.jpa.DomainEventEntry</class>
         <class>org.axonframework.eventsourcing.eventstore.jpa.SnapshotEventEntry</class>
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:brp;create=true"/>
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/target/db"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
