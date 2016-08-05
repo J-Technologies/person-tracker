@@ -71,7 +71,7 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
                   Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
                   fields.getOrElse("gemeente", ""),
                   fields.getOrElse("partij", "")
-              ))
+                ))
 
               complete(HttpResponse()
                 .withEntity("Geboorte commando received")
@@ -84,11 +84,16 @@ class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
           }
       }
 
-  def createNewGeboorte(voornaam: String, achternaam: String, geboortedatum: String, geslacht: Geslachtsaanduiding, gemeente: String, partij: String): GeboorteInNederland = new GeboorteInNederland(
-    Burgerservicenummer.nieuw,
-    SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
-    geslacht,
-    Geboorte(Datum(geboortedatum), Gemeente(gemeente)),
-    Partij(partij)
-  )
+  def createNewGeboorte(voornaam: String,
+                        achternaam: String,
+                        geboortedatum: String,
+                        geslacht: Geslachtsaanduiding,
+                        gemeente: String, partij: String): GeboorteInNederland =
+    GeboorteInNederland(
+      Burgerservicenummer.nieuw,
+      SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
+      geslacht,
+      Geboorte(Datum(geboortedatum), Gemeente(gemeente)),
+      Partij(partij)
+    )
 }
