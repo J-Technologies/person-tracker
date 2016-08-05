@@ -1,11 +1,12 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
+var del = require('del');
 var browserSync = require('browser-sync').create();
 
 var fs = require("fs");
 var browserify = require("browserify");
 
-if (!fs.existsSync('dist')){
+if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist');
 }
 
@@ -17,30 +18,27 @@ gulp.task('default', ['sass', 'babelify-js', 'index-html', 'browserSync'], () =>
     gulp.watch('src/js/**/*.js', ['babelify-js']);
 });
 
-gulp.task('sass', () => {
-    return gulp.src('src/scss/**/*.scss')
+gulp.task('sass', () => gulp.src('src/scss/**/*.scss')
         .pipe(sass())
         .pipe(gulp.dest('dist/css'))
-        .pipe(browserSync.reload({stream: true}))
-});
+        .pipe(browserSync.reload({stream: true})));
 
-gulp.task('index-html', function () {
-    gulp.src('src/index.html')
+gulp.task('index-html', () => gulp.src('src/index.html')
         .pipe(gulp.dest('dist'))
-        .pipe(browserSync.reload({stream: true}))
-});
+        .pipe(browserSync.reload({stream: true})));
 
-gulp.task('browserSync', () => {
-    browserSync.init({
+gulp.task('browserSync', () => browserSync.init({
         server: {
             baseDir: 'dist'
         }
-    })
-});
+    }));
 
-gulp.task('babelify-js', () => {
-    browserify("src/js/index.js")
-        .transform("babelify", {presets: ["es2015", "react"]})
-        .bundle()
-        .pipe(fs.createWriteStream("dist/bundle.js"))
-});
+gulp.task('babelify-js', () => browserify("src/js/index.js")
+    .transform("babelify", {presets: ["es2015", "react"]})
+    .bundle()
+    .pipe(fs.createWriteStream("dist/bundle.js")));
+
+
+gulp.task('release', ['sass', 'babelify-js', 'index-html']);
+
+gulp.task('clean', () => del(['dist/**/*', 'dist']));
