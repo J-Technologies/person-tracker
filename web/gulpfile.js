@@ -39,3 +39,5 @@ gulp.task('babelify-js', () => browserify("src/js/index.js")
     .pipe(fs.createWriteStream("dist/bundle.js")));
 
 gulp.task('clean', () => del(['dist/**/*', 'dist']));
+
+gulp.task('release', ['sass', 'index-html', 'babelify-js']);
