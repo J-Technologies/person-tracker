@@ -10,7 +10,7 @@ if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist');
 }
 
-gulp.task('default', ['sass', 'babelify-js', 'index-html', 'browserSync'], () => {
+gulp.task('default', ['sass', 'index-html', 'babelify-js', 'browserSync'], () => {
     gulp.src('src/scss/vendor/*.css').pipe(gulp.dest('dist/css/vendor'));
 
     gulp.watch('src/scss/**/*.scss', ['sass']);
@@ -37,8 +37,5 @@ gulp.task('babelify-js', () => browserify("src/js/index.js")
     .transform("babelify", {presets: ["es2015", "react"]})
     .bundle()
     .pipe(fs.createWriteStream("dist/bundle.js")));
-
-
-gulp.task('release', ['sass', 'babelify-js', 'index-html']);
 
 gulp.task('clean', () => del(['dist/**/*', 'dist']));
