@@ -6,21 +6,28 @@
   position: absolute;
   bottom: 0;
 
-  h4 {
+  h3 {
     text-align: right;
-
-    &:hover {
-      color: #6664ff;
-    }
   }
-
 
   pre {
-    display: none;
-    max-height: 20vh;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+
+    transition: height 1s ease;
+  }
+
+  &:hover h3 {
+    color: #6664ff;
+
+  }
+
+  &:hover pre {
+    height: 20vw
   }
 }
-
 
 @import "vendor/bootstrap.min.css";
 @import "vendor/bootstrap-theme.min.css";
