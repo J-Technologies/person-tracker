@@ -25,6 +25,6 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scalacheck" %% "scalacheck" % "1.12.5" % "test",
-  "org.axonframework" % "axon-test" % "3.0-M1",
+  "org.axonframework" % "axon-test" % "3.0-M3",
   "org.hamcrest" % "hamcrest-core" % "1.3"
 )
