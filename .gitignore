@@ -2,17 +2,8 @@ node_modules
 
 ### Intellij ###
 .idea/
-/out/
-.idea_modules/
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-.nb-gradle/
+web/dist/
 
 ### Scala ###
 *.class

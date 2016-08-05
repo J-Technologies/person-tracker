@@ -16,9 +16,11 @@ export default ({websocketUrl}) => {
 
     return (
         <div className="logging-output">
-            <div className="container" onClick={() => switchVisible(outputNode)}>
+            <div className="container">
 
-                <h4>Show Logging +</h4>
+                <h4 onClick={() => switchVisible(outputNode)}>
+                    Show Logging +
+                </h4>
 
                 <pre ref={node => outputNode = node}/>
 
