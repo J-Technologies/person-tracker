@@ -2,17 +2,17 @@
   * Copyright (C) 2016 Ordina
   */
 
-package nl.ordina
+package nl.ordina.personen.handlers.json
 
+import nl.ordina.personen.event
 import nl.ordina.personen.event.{PersoonGeboren, PersoonOverleden}
 import org.axonframework.eventhandling.{EventHandler, SimpleEventHandlerInvoker, SubscribingEventProcessor}
-import org.axonframework.eventsourcing.eventstore.EventStore
 
 import scala.collection.mutable
 
-class QueueEventHandler(eventStore: EventStore) {
+class JsonEventHandler {
 
-  val eventProcessor = new SubscribingEventProcessor(new SimpleEventHandlerInvoker("queue", this), eventStore)
+  val eventProcessor = new SubscribingEventProcessor(new SimpleEventHandlerInvoker("queue", this), event.eventStore)
   val queue = new mutable.Queue[String]()
 
   eventProcessor.start()

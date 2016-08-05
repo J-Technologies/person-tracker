@@ -1,4 +1,4 @@
-package nl.ordina
+package nl.ordina.personen.event
 
 import javax.persistence.EntityTransaction
 

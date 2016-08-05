@@ -4,7 +4,6 @@
 
 package nl.ordina.personen.datatype
 
-import nl.ordina.personen.ControleRegelException
 import org.scalacheck.Gen
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FunSuite, Matchers}

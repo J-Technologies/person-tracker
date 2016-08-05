@@ -1,4 +1,4 @@
-package nl.ordina.http
+package nl.ordina.personen
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -10,24 +10,24 @@ import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.Timeout
-import nl.ordina.EventHandlerActor
 import nl.ordina.personen.command.GeboorteInNederland
 import nl.ordina.personen.datatype.groep.Geboorte
 import nl.ordina.personen.datatype.{Datum, Gemeente, Geslachtsaanduiding, Partij, _}
+import nl.ordina.personen.handlers.EventHandlerActor
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.eventsourcing.eventstore.EventStore
 
 import scala.concurrent.duration._
 import scala.io.StdIn
 
-class WebServer(eventStore: EventStore, commandGateway: CommandGateway) {
+class WebServer(commandGateway: CommandGateway) {
 
   implicit val system = ActorSystem("webapi")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
   implicit val timeout = Timeout(1 second)
 
-  val eventSource: Source[Message, Any] = Source.actorPublisher[Message](EventHandlerActor.props(eventStore))
+  val eventSource: Source[Message, Any] = Source.actorPublisher[Message](EventHandlerActor.props)
   val eventSink: Sink[Message, Any] = Sink.foreach(println)
   val eventFlow: Flow[Message, Message, Any] = Flow.fromSinkAndSource(eventSink, eventSource)
 
