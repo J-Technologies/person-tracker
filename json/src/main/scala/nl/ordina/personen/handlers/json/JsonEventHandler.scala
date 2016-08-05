@@ -1,7 +1,3 @@
-/**
-  * Copyright (C) 2016 Ordina
-  */
-
 package nl.ordina.personen.handlers.json
 
 import nl.ordina.personen.event
