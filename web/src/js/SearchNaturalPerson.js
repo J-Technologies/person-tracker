@@ -13,7 +13,8 @@ export default class SearchNaturalPerson extends Component {
     searchPerson(bsn) {
         fetch("http://localhost:8124/persoon/" + document.getElementById('bsn').value)
             .then(response => response.json())
-            .then(result => this.setState({results: [result]}));
+            .then(result => this.setState({results: [result]}))
+            .catch(() => this.setState({results: []}));
     }
 
     render() {
