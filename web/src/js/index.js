@@ -1,16 +1,5 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import HeaderNav from "./HeaderNav";
-import Output from "./Output";
-import CreateNaturalPerson from "./CreateNaturalPerson";
+import App from "./App";
 
-ReactDOM.render(
-    <div>
-        <HeaderNav title="BRP">
-            <li className="active"><a href="#">Creeër persoon</a></li>
-        </HeaderNav>
-        <CreateNaturalPerson />
-        <Output websocketUrl="ws://localhost:8123/persoon/websocket"/>
-    </div>
-    , document.getElementById('brp')
-);
+ReactDOM.render(<App />, document.getElementById('brp'));
