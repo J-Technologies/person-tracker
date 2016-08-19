@@ -10,7 +10,7 @@ export default ({title, children}) => {
                     <a className="navbar-brand" href="#">{title}</a>
 
                 </div>
-                <div id="navbar" className="collapse navbar-collapse">
+                <div className="collapse navbar-collapse">
 
                     <ul className="nav navbar-nav">
                         {children}

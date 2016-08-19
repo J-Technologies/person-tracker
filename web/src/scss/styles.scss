@@ -29,5 +29,12 @@
   }
 }
 
+ul.nav.navbar-nav {
+  .active {
+    font-weight: bold;
+    color: white;
+  }
+}
+
 @import "vendor/bootstrap.min.css";
 @import "vendor/bootstrap-theme.min.css";
