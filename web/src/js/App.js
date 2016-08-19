@@ -13,13 +13,13 @@ export default class App extends Component {
         return (
             <div>
                 <HeaderNav title="BRP">
-                    <li onClick={() => this.setState({active: menuItem})}>
+                    <li>
                         <Link to="/createNaturalPerson" activeClassName="active">
                             Creeër persoon
                         </Link>
                     </li>
 
-                    <li onClick={() => this.setState({active: menuItem})}>
+                    <li>
                         <Link to="/searchNaturalPerson" activeClassName="active">
                             Zoek persoon
                         </Link>
