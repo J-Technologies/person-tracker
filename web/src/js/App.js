@@ -18,7 +18,11 @@ export default class App extends Component {
                     <Nav to="/searchNaturalPerson" label="Zoek persoon"/>
                 </Header>
 
-                {this.props.children}
+                <div className="content">
+
+                    {this.props.children}
+
+                </div>
 
                 <Output websocketUrl="ws://localhost:8123/persoon/websocket"/>
             </div>
