@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import InputField from "./form/InputField";
 import SubmitButton from "./form/SubmitButton";
 
-
 export default class SearchNaturalPerson extends Component {
 
     constructor(props) {
