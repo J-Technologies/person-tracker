@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router";
 
 export default ({title, children}) => {
 
@@ -7,7 +8,9 @@ export default ({title, children}) => {
             <div className="container">
                 <div className="navbar-header">
 
-                    <a className="navbar-brand" href="#">{title}</a>
+                    <Link className="navbar-brand" to="/">
+                        {title}
+                    </Link>
 
                 </div>
                 <div className="collapse navbar-collapse">
