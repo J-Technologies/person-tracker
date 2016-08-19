@@ -4,12 +4,13 @@ import {Router, Route, hashHistory, IndexRoute} from "react-router";
 import App from "./App";
 import CreateNaturalPerson from "./CreateNaturalPerson";
 import SearchNaturalPerson from "./SearchNaturalPerson";
+import Welcome from "./Welcome";
 
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={App}>
 
-            <IndexRoute component={CreateNaturalPerson}/>
+            <IndexRoute component={Welcome}/>
 
             <Route path="/createNaturalPerson" component={CreateNaturalPerson}/>
             <Route path="/searchNaturalPerson" component={SearchNaturalPerson}/>
@@ -18,5 +19,3 @@ ReactDOM.render(
 
     </Router>
     , document.getElementById('brp'));
-
-//<App />
