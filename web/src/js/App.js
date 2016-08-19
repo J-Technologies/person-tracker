@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import HeaderNav from "./HeaderNav";
+import Header from "./header/Header";
+import Nav from "./header/Nav";
 import Output from "./Output";
 import {Link} from "react-router";
 
@@ -12,19 +13,10 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <HeaderNav title="BRP">
-                    <li>
-                        <Link to="/createNaturalPerson" activeClassName="active">
-                            Creeër persoon
-                        </Link>
-                    </li>
-
-                    <li>
-                        <Link to="/searchNaturalPerson" activeClassName="active">
-                            Zoek persoon
-                        </Link>
-                    </li>
-                </HeaderNav>
+                <Header title="BRP">
+                    <Nav to="/createNaturalPerson" label="Creeër persoon"/>
+                    <Nav to="/searchNaturalPerson" label="Zoek persoon"/>
+                </Header>
 
                 {this.props.children}
 
