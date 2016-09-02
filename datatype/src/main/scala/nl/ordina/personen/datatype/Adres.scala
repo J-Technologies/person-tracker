@@ -26,7 +26,7 @@ object Adres {
   private val xml = XML.load(Source.fromURL(getClass.getResource("Adres.xml")).reader())
   private val lijst: Map[String, Adres] = (xml \\ "adres").map {
     node =>
-      val id = (node \ "id").text
+      val id = (node \ "url").text
       val gemeente = (node \ "gemeentenaam").text
       val straatNaam = (node \ "openbareruimtenaam").text
       val huisnummer = (node \ "huisnummer").text
