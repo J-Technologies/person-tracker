@@ -9,8 +9,6 @@ class PersonService {
     }
 
     _executePost(urlContext, body) {
-        console.warn(this.url + urlContext);
-
         fetch(this.url + urlContext, {
             method: 'post',
             body
