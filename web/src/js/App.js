@@ -16,7 +16,8 @@ export default class App extends Component {
                 <Header title="BRP">
                     <Nav to="/createNaturalPerson" label="Creeër persoon"/>
                     <Nav to="/searchNaturalPerson" label="Zoek persoon"/>
-                    <Nav to="/setPersonDeceased" label="Persoon overleden"/>
+                    <Nav to="/setPersonDeceased" label="Overlijden"/>
+                    <Nav to="/createHuwelijk" label="Huwelijk"/>
                 </Header>
 
                 <div className="content">
