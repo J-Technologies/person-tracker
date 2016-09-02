@@ -4,16 +4,25 @@ import SubmitButton from "./form/SubmitButton";
 
 export default class PersonDeceased extends Component {
 
+    postDeceasedPerson() {
+        fetch("http://localhost:8123/persoon/overlijden", {
+            method: 'post',
+            body: new FormData(document.getElementById('personDeceased'))
+        })
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
+    }
+
     render() {
         return (
             <div>
                 <h1>Overleden persoon</h1>
                 <hr/>
 
-                <form className="form-horizontal" id="searchPerson" onSubmit={
+                <form className="form-horizontal" id="personDeceased" onSubmit={
                     e => {
                         e.preventDefault();
-                        alert('not implemented yet')
+                        this.postDeceasedPerson();
                     }}>
                     <InputField id="bsn" label="BSN nummer"/>
 

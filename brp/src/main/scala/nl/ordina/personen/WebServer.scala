@@ -10,8 +10,8 @@ import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.Timeout
-import nl.ordina.personen.command.GeboorteInNederland
-import nl.ordina.personen.datatype.groep.Geboorte
+import nl.ordina.personen.command.{GeboorteInNederland, OverlijdenPersoon}
+import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
 import nl.ordina.personen.datatype.{Datum, Gemeente, Geslachtsaanduiding, Partij, _}
 import nl.ordina.personen.handlers.EventHandlerActor
 import org.axonframework.commandhandling.gateway.CommandGateway
@@ -77,6 +77,21 @@ class WebServer(commandGateway: CommandGateway) {
                 .withHeaders(`Access-Control-Allow-Origin` *))
             }
           }
+        } ~ path("overlijden") {
+          post {
+            formFieldMap { fields =>
+              commandGateway.sendAndWait(
+                createOverlijden(
+                  fields.getOrElse("bsn", ""),
+                  fields.getOrElse("datum", ""),
+                  fields.getOrElse("gemeente", "")
+                ))
+              complete(HttpResponse()
+                .withEntity("Overlijden commando received")
+                .withHeaders(`Access-Control-Allow-Origin` *))
+            }
+          }
+
         } ~
           path("websocket") {
             handleWebSocketMessages(eventFlow)
@@ -95,6 +110,12 @@ class WebServer(commandGateway: CommandGateway) {
       Geboorte(Datum(geboortedatum), Gemeente(gemeente)),
       Partij(partij)
     )
+
+
+  def createOverlijden(bsn: String, datum: String, gemeente: String): OverlijdenPersoon = OverlijdenPersoon(
+    burgerservicenummer = Burgerservicenummer(bsn),
+    overlijden = Overlijden(Datum(datum), Gemeente(gemeente))
+  )
 }
 
 object WebServer {
