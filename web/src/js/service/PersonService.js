@@ -1,6 +1,7 @@
 
 const DECEASED_URL = "persoon/overlijden";
 const GEBOORTE_URL = "persoon/geboorte";
+const HUWELIJK_URL = "persoon/huwelijk";
 
 class PersonService {
 
@@ -17,12 +18,16 @@ class PersonService {
             .catch(err => console.error(err));
     }
 
-    postCreateNaturalPerson(body) {
+    createNaturalPerson(body) {
         this._executePost(GEBOORTE_URL, body);
     }
 
-    postDeceasedPerson(body = {bsn: '', datum: '10/10/1940', gemeente: "0505"}) {
+    putDeceasedPerson(body = {bsn: '', datum: '10/10/1940', gemeente: "0505"}) {
         this._executePost(DECEASED_URL, body);
+    }
+
+    createHuwelijk(body) {
+        this._executePost(HUWELIJK_URL, body);
     }
 }
 

@@ -4,13 +4,14 @@ const propTypes = {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     type: PropTypes.oneOf(['text', 'date']),
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    required: PropTypes.bool
 };
 
 class InputField extends Component {
 
     render() {
-        const {id, label, type, placeholder} = this.props;
+        const {id, label, type, placeholder, required} = this.props;
         return (
             <div className="form-group">
 
@@ -21,7 +22,8 @@ class InputField extends Component {
                     <input name={id} id={id}
                            type={type}
                            className="form-control"
-                           placeholder={placeholder || label}/>
+                           placeholder={placeholder || label}
+                           required={required || false}/>
 
                 </div>
             </div>

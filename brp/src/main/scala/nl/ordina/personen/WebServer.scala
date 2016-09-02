@@ -10,7 +10,7 @@ import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.Timeout
-import nl.ordina.personen.command.{GeboorteInNederland, OverlijdenPersoon}
+import nl.ordina.personen.command.{GeboorteInNederland, Huwelijk, OverlijdenPersoon}
 import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
 import nl.ordina.personen.datatype.{Datum, Gemeente, Geslachtsaanduiding, Partij, _}
 import nl.ordina.personen.handlers.EventHandlerActor
@@ -92,6 +92,21 @@ class WebServer(commandGateway: CommandGateway) {
             }
           }
 
+        } ~ path("huwelijk") {
+          post {
+            formFieldMap { fields =>
+              commandGateway.sendAndWait(
+                createHuwelijk(
+                  List(fields.getOrElse("bsn1", ""), fields.getOrElse("bsn2", "")),
+                  fields.getOrElse("datum", ""),
+                  fields.getOrElse("gemeente", "")
+                ))
+              complete(HttpResponse()
+                .withEntity("Huwelijk commando received")
+                .withHeaders(`Access-Control-Allow-Origin` *))
+            }
+          }
+
         } ~
           path("websocket") {
             handleWebSocketMessages(eventFlow)
@@ -116,6 +131,8 @@ class WebServer(commandGateway: CommandGateway) {
     burgerservicenummer = Burgerservicenummer(bsn),
     overlijden = Overlijden(Datum(datum), Gemeente(gemeente))
   )
+
+  def createHuwelijk(bsn: List[String], datum: String, gemeente: String): Huwelijk =Huwelijk(bsn.map(Burgerservicenummer(_)), Datum(datum), Gemeente(gemeente))
 }
 
 object WebServer {

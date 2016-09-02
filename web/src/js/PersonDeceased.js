@@ -7,7 +7,7 @@ export default class PersonDeceased extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        service.postDeceasedPerson(new FormData(document.getElementById('personDeceased')));
+        service.putDeceasedPerson(new FormData(document.getElementById('personDeceased')));
     }
 
     render() {

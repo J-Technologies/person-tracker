@@ -8,7 +8,7 @@ export default () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        service.postCreateNaturalPerson(new FormData(document.getElementById('createPerson')));
+        service.createNaturalPerson(new FormData(document.getElementById('createPerson')));
     };
 
     return (
