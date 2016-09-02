@@ -4,13 +4,13 @@
 
 package nl.ordina.personen.domein.entity
 
-import nl.ordina.personen.command.{GeboorteInNederland, OverlijdenPersoon}
+import nl.ordina.personen.command.{Huwelijk, GeboorteInNederland, OverlijdenPersoon}
 import nl.ordina.personen.datatype.Bijhoudingsaard.INGEZETENE
 import nl.ordina.personen.datatype.Geslachtsaanduiding.ONBEKEND
 import nl.ordina.personen.datatype.SoortPersoon.INGESCHREVENE
 import nl.ordina.personen.datatype._
 import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
-import nl.ordina.personen.event.{PersoonGeboren, PersoonOverleden}
+import nl.ordina.personen.event.{HuwelijkGecreeërd, PersoonGeboren, PersoonOverleden}
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.model.{AggregateIdentifier, AggregateLifecycle, AggregateRoot}
 import org.axonframework.eventsourcing.EventSourcingHandler
@@ -51,6 +51,9 @@ class NatuurlijkPersoon extends Persoon(INGESCHREVENE) {
     AggregateLifecycle.apply(PersoonOverleden(command.burgerservicenummer, command.overlijden))
   }
 
+  @CommandHandler
+  def handle(command: Huwelijk) = AggregateLifecycle.apply(HuwelijkGecreeërd())
+
   @EventSourcingHandler
   def on(event: PersoonGeboren) = {
     this.burgerservicenummer = event.bsn
@@ -62,7 +65,8 @@ class NatuurlijkPersoon extends Persoon(INGESCHREVENE) {
   }
 
   @EventSourcingHandler
-  def on(event: PersoonOverleden) = {
-    this.overlijden = event.overlijden
-  }
+  def on(event: PersoonOverleden) = this.overlijden = event.overlijden
+
+  @EventSourcingHandler
+  def on(event: Huwelijk) = ()
 }

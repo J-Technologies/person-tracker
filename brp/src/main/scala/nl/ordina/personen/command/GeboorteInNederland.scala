@@ -12,4 +12,6 @@ case class GeboorteInNederland(
   ouders: List[Burgerservicenummer] = null,
   adres: Adres = null,
   bijhoudingspartij: Partij
-)
+) {
+  assert(ouders.size >= 0 && ouders.size <= 2)
+}
