@@ -1,16 +1,13 @@
 import React, {Component} from "react";
 import InputField from "./form/InputField";
 import SubmitButton from "./form/SubmitButton";
+import service from "./service/PersonService"
 
 export default class PersonDeceased extends Component {
 
-    postDeceasedPerson() {
-        fetch("http://localhost:8123/persoon/overlijden", {
-            method: 'post',
-            body: new FormData(document.getElementById('personDeceased'))
-        })
-            .then(response => console.log(response))
-            .catch(err => console.error(err));
+    handleSubmit(e) {
+        e.preventDefault();
+        service.postDeceasedPerson(new FormData(document.getElementById('personDeceased')));
     }
 
     render() {
@@ -19,11 +16,7 @@ export default class PersonDeceased extends Component {
                 <h1>Overleden persoon</h1>
                 <hr/>
 
-                <form className="form-horizontal" id="personDeceased" onSubmit={
-                    e => {
-                        e.preventDefault();
-                        this.postDeceasedPerson();
-                    }}>
+                <form className="form-horizontal" id="personDeceased" onSubmit={this.handleSubmit}>
                     <InputField id="bsn" label="BSN nummer"/>
 
                     <InputField id="datum" label="Datum overlijden" type="date"/>

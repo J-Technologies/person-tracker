@@ -2,25 +2,20 @@ import React from "react";
 import InputField from "./form/InputField";
 import RadioButtonField from "./form/RadioButtonField";
 import SubmitButton from "./form/SubmitButton";
+import service from "./service/PersonService"
 
 export default () => {
 
-    const postCreateNaturalPerson = () => fetch("http://localhost:8123/persoon/geboorte", {
-        method: 'post',
-        body: new FormData(document.getElementById('createPerson'))
-    })
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
+    const handleSubmit = e => {
+        e.preventDefault();
+        service.postCreateNaturalPerson(new FormData(document.getElementById('createPerson')));
+    };
 
     return (
         <div>
             <h1>Schrijf een natuurlijk persoon in</h1>
             <hr/>
-            <form className="form-horizontal" id="createPerson" onSubmit={
-                e => {
-                    e.preventDefault();
-                    postCreateNaturalPerson();
-            }}>
+            <form className="form-horizontal" id="createPerson" onSubmit={handleSubmit}>
 
                 <InputField id="voornaam" label="Voornaam"/>
 
