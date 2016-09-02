@@ -15,8 +15,11 @@ ReactDOM.render(
             <IndexRoute component={Welcome}/>
 
             <Route path="/createNaturalPerson" component={CreateNaturalPerson}/>
+
             <Route path="/searchNaturalPerson" component={SearchNaturalPerson}/>
+
             <Route path="/setPersonDeceased" component={PersonDeceased}/>
+
             <Route path="/createHuwelijk" component={CreateHuwelijk}/>
 
         </Route>

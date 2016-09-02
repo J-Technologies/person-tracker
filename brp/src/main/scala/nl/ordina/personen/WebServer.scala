@@ -122,7 +122,7 @@ class WebServer(commandGateway: CommandGateway) {
       Burgerservicenummer.nieuw,
       SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
       geslacht,
-      Geboorte(Datum(geboortedatum), Gemeente(gemeente)),null, null,
+      Geboorte(Datum(geboortedatum), Gemeente(gemeente)), List(), null,
       Partij(partij)
     )
 
