@@ -3,13 +3,14 @@ import React, {Component, PropTypes} from "react";
 const propTypes = {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['text', 'date'])
+    type: PropTypes.oneOf(['text', 'date']),
+    placeholder: PropTypes.string
 };
 
 class InputField extends Component {
 
     render() {
-        const {id, label, type} = this.props;
+        const {id, label, type, placeholder} = this.props;
         return (
             <div className="form-group">
 
@@ -17,7 +18,10 @@ class InputField extends Component {
 
                 <div className="col-sm-10">
 
-                    <input type={type} className="form-control" name={id} id={id} placeholder={label}/>
+                    <input name={id} id={id}
+                           type={type}
+                           className="form-control"
+                           placeholder={placeholder || label}/>
 
                 </div>
             </div>
