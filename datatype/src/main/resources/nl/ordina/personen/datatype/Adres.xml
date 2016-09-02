@@ -1,0 +1,34 @@
+<adressen>
+    <adres>
+        <id>3015ba-nieuwe-binnenweg-10-a</id>
+        <gemeentenaam>Rotterdam</gemeentenaam>
+        <huisletter>A</huisletter>
+        <huisnummer>10</huisnummer>
+        <huisnummertoevoeging></huisnummertoevoeging>
+        <locatie>
+            <lat>51.916710</lat>
+            <lon>4.472166</lon>
+        </locatie>
+        <openbareruimtenaam>Nieuwe Binnenweg</openbareruimtenaam>
+        <postcode>3015BA</postcode>
+        <provincienaam>Zuid-Holland</provincienaam>
+        <typeadresseerbaarobject>VBO</typeadresseerbaarobject>
+        <woonplaatsnaam>Rotterdam</woonplaatsnaam>
+    </adres>
+    <adres>
+        <id>1335kd-kwartaalstraat-9</id>
+        <gemeentenaam>Almere</gemeentenaam>
+        <huisletter></huisletter>
+        <huisnummer>9</huisnummer>
+        <huisnummertoevoeging></huisnummertoevoeging>
+        <locatie>
+            <lat>52.405625</lat>
+            <lon>5.286450</lon>
+        </locatie>
+        <openbareruimtenaam>Kwartaalstraat</openbareruimtenaam>
+        <postcode>1335KD</postcode>
+        <provincienaam>Flevoland</provincienaam>
+        <typeadresseerbaarobject>VBO</typeadresseerbaarobject>
+        <woonplaatsnaam>Almere</woonplaatsnaam>
+    </adres>
+</adressen>

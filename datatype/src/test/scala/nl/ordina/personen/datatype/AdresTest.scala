@@ -52,4 +52,14 @@ class AdresTest extends FunSuite with Matchers {
       "1234AB"
     )
   }
+
+  test("Zoek een adres op") {
+    val adres: Adres = Adres("3015ba-nieuwe-binnenweg-10-a")
+
+    adres.id.value should be("3015ba-nieuwe-binnenweg-10-a")
+    adres.gemeente.naam.value should be("Rotterdam")
+    adres.huisnummer.value should be(10)
+    adres.straatNaam.value should be("Nieuwe Binnenweg")
+    adres.postcode.value should be("3015BA")
+  }
 }
