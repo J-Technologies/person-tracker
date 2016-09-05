@@ -1,7 +1,7 @@
 version := "1.0"
 scalaVersion := "2.11.8"
 
-resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += Resolver.typesafeRepo("releases")
 
 //unmanagedBase := Path.fileProperty("java.home").toPath.resolveSibling("db").resolve("lib").toFile
 

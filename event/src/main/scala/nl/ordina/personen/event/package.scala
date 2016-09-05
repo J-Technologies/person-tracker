@@ -1,35 +1,30 @@
 package nl.ordina.personen
 
-import javax.persistence.Persistence
-
+import com.datastax.driver.core.Cluster
 import nl.ordina.personen.datatype._
 import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
-import org.axonframework.common.jpa.SimpleEntityManagerProvider
+import nl.ordina.personen.event.cassandra.{CassandraStorageEngine, CassandraTransactionManager}
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
-import org.axonframework.eventsourcing.eventstore.jpa.JpaEventStorageEngine
-import org.axonframework.serialization.xml.XStreamSerializer
 
 package object event {
 
-  private lazy val entityManagerFactory = Persistence.createEntityManagerFactory("BRP")
-  private lazy val entityManagerProvider = new SimpleEntityManagerProvider(entityManagerFactory.createEntityManager())
-  private lazy val serializer = new XStreamSerializer()
-  private lazy val eventStorageEngine = new JpaEventStorageEngine(entityManagerProvider, transactionManager) {
-    setSerializer(serializer)
-  }
-  lazy val transactionManager = JpaTransactionManager(entityManagerProvider)
+  private lazy val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
+  private lazy val session = cluster.connect("brp")
+  lazy val transactionManager = new CassandraTransactionManager(session)
+  private lazy val eventStorageEngine = new CassandraStorageEngine(transactionManager, session)
   lazy val eventStore = new EmbeddedEventStore(eventStorageEngine)
 
   case class PersoonGeboren(
-    bsn: Burgerservicenummer,
-    naam: SamengesteldeNaam,
-    geslacht: Geslachtsaanduiding,
-    geboorte: Geboorte,
-    bijhoudingspartij: Partij
-  )
+                             bsn: Burgerservicenummer,
+                             naam: SamengesteldeNaam,
+                             geslacht: Geslachtsaanduiding,
+                             geboorte: Geboorte,
+                             bijhoudingspartij: Partij
+                           )
 
   case class PersoonOverleden(
-    bsn: Burgerservicenummer,
-    overlijden: Overlijden
-  )
+                               bsn: Burgerservicenummer,
+                               overlijden: Overlijden
+                             )
+
 }

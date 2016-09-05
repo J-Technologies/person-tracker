@@ -1,8 +1,6 @@
 package nl.ordina.personen.handlers
 
 import javax.persistence.Persistence
-
-import nl.ordina.personen.event.{JpaTransactionManager, JpaTransactionTokenStore}
 import org.axonframework.common.jpa.SimpleEntityManagerProvider
 import org.axonframework.serialization.xml.XStreamSerializer
 

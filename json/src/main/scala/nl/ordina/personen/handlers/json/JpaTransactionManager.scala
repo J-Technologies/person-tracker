@@ -1,4 +1,4 @@
-package nl.ordina.personen.event
+package nl.ordina.personen.handlers.json
 
 import org.axonframework.common.jpa.EntityManagerProvider
 import org.axonframework.common.transaction.{Transaction, TransactionIsolationLevel, TransactionManager}
