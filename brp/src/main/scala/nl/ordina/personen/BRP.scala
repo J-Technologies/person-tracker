@@ -4,9 +4,9 @@ import java.io.PrintWriter
 import java.sql.Connection
 import java.util.Properties
 
-import nl.ordina.personen.command.GeboorteInNederland
+import nl.ordina.personen.command.{GeboorteInNederland, OverlijdenPersoon}
 import nl.ordina.personen.datatype._
-import nl.ordina.personen.datatype.groep.Geboorte
+import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
 import nl.ordina.personen.domein.entity.NatuurlijkPersoon
 import org.apache.derby.drda.NetworkServerControl
 import org.apache.derby.jdbc.EmbeddedDriver
@@ -31,13 +31,20 @@ object BRP {
     val commandHandler = new AggregateAnnotationCommandHandler(classOf[NatuurlijkPersoon], repository)
     val commandHandlerRegistration = commandHandler.subscribe(commandBus)
 
+    val burgerservicenummer = Burgerservicenummer.nieuw
     commandGateway.sendAndWait(
       GeboorteInNederland(
-        Burgerservicenummer.nieuw,
+        burgerservicenummer,
         SamengesteldeNaam(Voornamen("Gerard"), Geslachtsnaam(Geslachtsnaamstam("Leeuw"), Option(Voorvoegsel("de")))),
         Geslachtsaanduiding.MAN,
-        Geboorte(Datum.vandaag, Gemeente("1896")),
+        Geboorte(Datum.gisteren, Gemeente("1896")),
         Partij("000505")
+      )
+    )
+    commandGateway.sendAndWait(
+      OverlijdenPersoon(
+        burgerservicenummer,
+        Overlijden(Datum.vandaag, Gemeente("1896"))
       )
     )
 

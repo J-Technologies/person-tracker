@@ -26,9 +26,9 @@ public class SnapshotEventEntry implements DomainEventData<byte[]> {
     @Column(caseSensitive = true)
     private String payloadRevision;
     @Column(caseSensitive = true)
-    private ByteBuffer payload;
+    private ByteBuffer payloadBuffer;
     @Column(caseSensitive = true)
-    private ByteBuffer metaData;
+    private ByteBuffer metaDataBuffer;
     @Column(caseSensitive = true)
     private String type;
     @Column(caseSensitive = true)
@@ -43,8 +43,8 @@ public class SnapshotEventEntry implements DomainEventData<byte[]> {
         this.eventIdentifier = eventMessage.getIdentifier();
         this.payloadType = payload.getType().getName();
         this.payloadRevision = payload.getType().getRevision();
-        this.payload = ByteBuffer.wrap(payload.getData());
-        this.metaData = ByteBuffer.wrap(metaData.getData());
+        this.payloadBuffer = ByteBuffer.wrap(payload.getData());
+        this.metaDataBuffer = ByteBuffer.wrap(metaData.getData());
         this.timeStamp = eventMessage.getTimestamp().toString();
         this.type = eventMessage.getType();
         this.aggregateIdentifier = eventMessage.getAggregateIdentifier();
@@ -81,59 +81,17 @@ public class SnapshotEventEntry implements DomainEventData<byte[]> {
     }
 
     @Override
+    @Transient
     @SuppressWarnings("unchecked")
     public SerializedObject<byte[]> getMetaData() {
-        return new SerializedMetaData<>(metaData.array(), byte[].class);
+        return new SerializedMetaData<>(metaDataBuffer.array(), byte[].class);
     }
 
     @Override
+    @Transient
     @SuppressWarnings("unchecked")
     public SerializedObject<byte[]> getPayload() {
-        return new SimpleSerializedObject<>(payload.array(), byte[].class, getPayloadType());
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public String getPayloadRevision() {
-        return payloadRevision;
-    }
-
-    public void setEventIdentifier(String eventIdentifier) {
-        this.eventIdentifier = eventIdentifier;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public void setPayloadType(String payloadType) {
-        this.payloadType = payloadType;
-    }
-
-    public void setPayloadRevision(String payloadRevision) {
-        this.payloadRevision = payloadRevision;
-    }
-
-    public void setPayload(ByteBuffer payload) {
-        this.payload = payload;
-    }
-
-    public void setMetaData(ByteBuffer metaData) {
-        this.metaData = metaData;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setAggregateIdentifier(String aggregateIdentifier) {
-        this.aggregateIdentifier = aggregateIdentifier;
-    }
-
-    public void setSequenceNumber(long sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
+        return new SimpleSerializedObject<>(payloadBuffer.array(), byte[].class, getPayloadType());
     }
 
     protected SerializedType getPayloadType() {

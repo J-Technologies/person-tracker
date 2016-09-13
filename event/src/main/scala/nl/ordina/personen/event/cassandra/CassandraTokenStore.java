@@ -3,8 +3,6 @@ package nl.ordina.personen.event.cassandra;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
-import org.axonframework.common.transaction.Transaction;
-import org.axonframework.common.transaction.TransactionManager;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.eventstore.TrackingToken;
 import org.axonframework.serialization.Serializer;
@@ -16,12 +14,10 @@ import java.util.Optional;
  */
 public class CassandraTokenStore implements TokenStore {
 
-    private final TransactionManager transactionManager;
     private final Serializer serializer;
     private final Mapper<TokenEntry> tokenMapper;
 
-    public CassandraTokenStore(TransactionManager transactionManager, Serializer serializer, Session session) {
-        this.transactionManager = transactionManager;
+    public CassandraTokenStore(Session session, Serializer serializer) {
         this.serializer = serializer;
         MappingManager mappingManager = new MappingManager(session);
         this.tokenMapper = mappingManager.mapper(TokenEntry.class);
@@ -29,14 +25,7 @@ public class CassandraTokenStore implements TokenStore {
 
     @Override
     public void storeToken(String processName, int segment, TrackingToken token) {
-        Transaction transaction = transactionManager.startTransaction();
-        try {
-            tokenMapper.save(new TokenEntry(processName, segment, token, serializer));
-            transaction.commit();
-        } catch (Throwable e) {
-            transaction.rollback();
-            throw e;
-        }
+        tokenMapper.save(new TokenEntry(processName, segment, token, serializer));
     }
 
     @Override

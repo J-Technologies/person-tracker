@@ -1,6 +1,9 @@
 package nl.ordina.personen.handlers
 
 import javax.persistence.Persistence
+
+import nl.ordina.personen.event
+import nl.ordina.personen.event.cassandra.CassandraTokenStore
 import org.axonframework.common.jpa.SimpleEntityManagerProvider
 import org.axonframework.serialization.xml.XStreamSerializer
 
@@ -13,7 +16,7 @@ package object json {
   private lazy val entityManagerProvider = new SimpleEntityManagerProvider(entityManagerFactory.createEntityManager())
   private lazy val serializer = new XStreamSerializer()
   private lazy val transactionManager = JpaTransactionManager(entityManagerProvider)
-  lazy val tokenStore = JpaTransactionTokenStore(entityManagerProvider, serializer, transactionManager)
+  lazy val tokenStore = new CassandraTokenStore(event.session, serializer)
   lazy val jsonRepository = JsonRepository(entityManagerProvider, transactionManager)
 
 }

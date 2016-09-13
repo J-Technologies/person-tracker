@@ -9,7 +9,8 @@ object JpaTransactionManager {
       override def startTransaction(isolationLevel: TransactionIsolationLevel): Transaction =
         new Transaction {
           val entityTransaction = entityManagerProvider.getEntityManager.getTransaction
-          entityTransaction.begin()
+
+          if (!entityTransaction.isActive) entityTransaction.begin()
 
           override def rollback(): Unit = entityTransaction.rollback()
 

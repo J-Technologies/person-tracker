@@ -11,6 +11,7 @@ import org.axonframework.serialization.SimpleSerializedType;
 
 import java.nio.ByteBuffer;
 import java.time.Instant;
+import java.util.Date;
 
 /**
  * Created by gle21221 on 2-9-2016.
@@ -24,67 +25,27 @@ public class TokenEntry {
     @PartitionKey(1)
     private int segment;
     @Column(caseSensitive = true)
-    private ByteBuffer token;
+    private ByteBuffer tokenBuffer;
     @Column(caseSensitive = true)
     private String tokenType;
     @Column(caseSensitive = true)
-    private long timeStamp;
+    private Date timeStamp;
 
-    public TokenEntry(String process, int segment, TrackingToken token, Serializer serializer) {
-        SerializedObject<byte[]> serializedToken = serializer.serialize(token, byte[].class);
+    public TokenEntry(String process, int segment, TrackingToken tokenBuffer, Serializer serializer) {
+        SerializedObject<byte[]> serializedToken = serializer.serialize(tokenBuffer, byte[].class);
         this.processName = process;
         this.segment = segment;
-        this.token = ByteBuffer.wrap(serializedToken.getData());
+        this.tokenBuffer = ByteBuffer.wrap(serializedToken.getData());
         this.tokenType = serializedToken.getType().getName();
-        this.timeStamp = Instant.now().toEpochMilli();
+        this.timeStamp = new Date();
     }
 
     protected TokenEntry() {
     }
 
-    public String getProcessName() {
-        return processName;
-    }
-
-    public int getSegment() {
-        return segment;
-    }
-
-    public ByteBuffer getToken() {
-        return token;
-    }
-
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
-
-    public void setSegment(int segment) {
-        this.segment = segment;
-    }
-
-    public void setToken(ByteBuffer token) {
-        this.token = token;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
     public TrackingToken trackingToken(Serializer serializer) {
         SimpleSerializedObject<byte[]> serializedObject =
-                new SimpleSerializedObject<>(token.array(), byte[].class, new SimpleSerializedType(tokenType, null));
+                new SimpleSerializedObject<>(tokenBuffer != null ? tokenBuffer.array() : null, byte[].class, new SimpleSerializedType(tokenType, null));
         return serializer.deserialize(serializedObject);
     }
 }
