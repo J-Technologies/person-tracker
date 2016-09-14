@@ -19,23 +19,6 @@ object BRP {
     val commandHandler = new AggregateAnnotationCommandHandler(classOf[NatuurlijkPersoon], repository)
     val commandHandlerRegistration = commandHandler.subscribe(commandBus)
 
-    val burgerservicenummer = Burgerservicenummer.nieuw
-    commandGateway.sendAndWait(
-      GeboorteInNederland(
-        burgerservicenummer,
-        SamengesteldeNaam(Voornamen("Gerard"), Geslachtsnaam(Geslachtsnaamstam("Leeuw"), Option(Voorvoegsel("de")))),
-        Geslachtsaanduiding.MAN,
-        Geboorte(Datum.gisteren, Gemeente("1896")),
-        Partij("000505")
-      )
-    )
-    commandGateway.sendAndWait(
-      OverlijdenPersoon(
-        burgerservicenummer,
-        Overlijden(Datum.vandaag, Gemeente("1896"))
-      )
-    )
-
     new WebServer(commandGateway).start()
     commandHandlerRegistration.close()
   }

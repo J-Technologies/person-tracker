@@ -7,6 +7,7 @@ import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,11 +37,13 @@ public class TransactionEntry {
     }
 
     Stream<EventsReference> eventsReferences() {
-        return eventsReferences.stream()
-                .map(tupleValue -> new EventsReference(
-                        tupleValue.getString(0),
-                        tupleValue.getLong(1),
-                        tupleValue.getLong(2))
-                );
+        return Optional.ofNullable(eventsReferences)
+                .map(tupleValues -> tupleValues.stream()
+                        .map(tupleValue -> new EventsReference(
+                                tupleValue.getString(0),
+                                tupleValue.getLong(1),
+                                tupleValue.getLong(2))
+                        )
+                ).orElse(Stream.empty());
     }
 }
