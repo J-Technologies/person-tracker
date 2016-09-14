@@ -7,25 +7,21 @@ import org.axonframework.eventhandling.{EventHandler, SimpleEventHandlerInvoker,
 
 import scala.collection.mutable
 
-class JsonEventHandler(jsonRepository: JsonRepository) {
+class JsonEventHandler {
 
   val eventProcessor = new TrackingEventProcessor("json", new SimpleEventHandlerInvoker(this), event.eventStore, json.tokenStore)
   val queue = new mutable.Queue[String]()
 
-  eventProcessor.start()
+  def start(): Unit = eventProcessor.start()
 
   @EventHandler
-  def handle(event: PersoonGeboren): Unit = {
-    jsonRepository.store(PersoonEntry(event.bsn.value, event.naam.toString, isOverleden = false))
-  }
+  def handle(event: PersoonGeboren): Unit =
+    persoonMapper.save(PersoonEntry(event.bsn.value, event.naam.toString, overleden = false))
 
   @EventHandler
-  def handle(event: PersoonOverleden): Unit = jsonRepository.select(event.bsn.value) match {
-      case Some(person) => jsonRepository.store(PersoonEntry(person.bsn, person.naam, isOverleden = true))
+  def handle(event: PersoonOverleden): Unit =
+    Option(persoonMapper.get(event.bsn.value)) match {
+      case Some(persoon) => persoonMapper.save(PersoonEntry(persoon.bsn, persoon.naam, overleden = true))
       case None => throw new Error("person not found")
     }
-}
-
-object JsonEventHandler {
-  def apply(jsonRepository: JsonRepository): JsonEventHandler = new JsonEventHandler(jsonRepository)
 }

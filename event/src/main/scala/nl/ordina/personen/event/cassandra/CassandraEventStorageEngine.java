@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 /**
  * Created by gle21221 on 2-9-2016.
  */
-public class CassandraStorageEngine extends BatchingEventStorageEngine {
+public class CassandraEventStorageEngine extends BatchingEventStorageEngine {
 
     private final TransactionManager transactionManager;
     private final CassandraClient client;
 
-    public CassandraStorageEngine(TransactionManager transactionManager, CassandraClient client) {
+    public CassandraEventStorageEngine(TransactionManager transactionManager, CassandraClient client) {
         super(transactionManager);
         this.transactionManager = transactionManager;
         this.client = client;
