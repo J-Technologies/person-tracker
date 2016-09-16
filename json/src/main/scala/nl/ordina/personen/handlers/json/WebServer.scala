@@ -10,15 +10,11 @@ import akka.http.scaladsl.model.headers.`Access-Control-Allow-Origin`
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
-import spray.json.DefaultJsonProtocol
 
 import scala.io.StdIn
 
-trait Protocols extends DefaultJsonProtocol {
-  implicit val persoonEntryFormat = jsonFormat3(PersoonEntry.apply)
-}
 
-class WebServer extends Protocols {
+class WebServer extends PersoonJsonProtocol {
 
   implicit val system = ActorSystem("json")
   implicit val materializer = ActorMaterializer()
