@@ -9,12 +9,11 @@ import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
 
 package object event {
 
-  lazy val transactionManager = NoTransactionManager.INSTANCE
-  cassandra.createSchemaIfNotExists(cluster, "axon")
-  lazy val eventStore = new EmbeddedEventStore(eventStorageEngine)
-  private lazy val session = cluster.connect("axon")
-  private lazy val eventStorageEngine = new CassandraEventStorageEngine(session, transactionManager)
   private val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
+  cassandra.createSchemaIfNotExists(cluster, "axon")
+  lazy val transactionManager = NoTransactionManager.INSTANCE
+  private lazy val eventStorageEngine = new CassandraEventStorageEngine(cluster.connect("axon"), transactionManager)
+  lazy val eventStore = new EmbeddedEventStore(eventStorageEngine)
 
   case class PersoonGeboren(
     bsn: Burgerservicenummer,
