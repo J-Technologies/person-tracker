@@ -1,4 +1,4 @@
-package nl.ordina.personen.event.cassandra;
+package nl.ordina.personen.cassandra;
 
 import org.axonframework.eventsourcing.eventstore.TrackingToken;
 

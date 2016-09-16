@@ -1,4 +1,4 @@
-package nl.ordina.personen.event.cassandra;
+package nl.ordina.personen.cassandra;
 
 import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
@@ -6,24 +6,21 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.datastax.driver.mapping.annotations.Transient;
 import org.axonframework.eventsourcing.DomainEventMessage;
 import org.axonframework.eventsourcing.eventstore.DomainEventData;
-import org.axonframework.eventsourcing.eventstore.TrackedEventData;
-import org.axonframework.eventsourcing.eventstore.TrackingToken;
 import org.axonframework.serialization.*;
 
 import java.nio.ByteBuffer;
 import java.time.Instant;
-import java.util.Date;
 
 /**
  * Created by gle21221 on 2-9-2016.
  */
-@Table(name = "DomainEventEntry", caseSensitiveTable = true)
-public class DomainEventEntry implements DomainEventData<byte[]>, TrackedEventData<byte[]> {
+@Table(name = "SnapshotEventEntry", caseSensitiveTable = true)
+public class SnapshotEventEntry implements DomainEventData<byte[]> {
 
     @Column(caseSensitive = true)
     private String eventIdentifier;
     @Column(caseSensitive = true)
-    private Date timeStamp;
+    private String timeStamp;
     @Column(caseSensitive = true)
     private String payloadType;
     @Column(caseSensitive = true)
@@ -38,12 +35,9 @@ public class DomainEventEntry implements DomainEventData<byte[]>, TrackedEventDa
     @PartitionKey
     private String aggregateIdentifier;
     @Column(caseSensitive = true)
-    @PartitionKey(1)
     private long sequenceNumber;
-    @Column(caseSensitive = true)
-    private long transactionIndex;
 
-    public DomainEventEntry(DomainEventMessage<?> eventMessage, Serializer serializer) {
+    public SnapshotEventEntry(DomainEventMessage<?> eventMessage, Serializer serializer) {
         SerializedObject<byte[]> payload = serializer.serialize(eventMessage.getPayload(), byte[].class);
         SerializedObject<byte[]> metaData = serializer.serialize(eventMessage.getMetaData(), byte[].class);
         this.eventIdentifier = eventMessage.getIdentifier();
@@ -51,13 +45,13 @@ public class DomainEventEntry implements DomainEventData<byte[]>, TrackedEventDa
         this.payloadRevision = payload.getType().getRevision();
         this.payloadBuffer = ByteBuffer.wrap(payload.getData());
         this.metaDataBuffer = ByteBuffer.wrap(metaData.getData());
-        this.timeStamp = new Date(eventMessage.getTimestamp().toEpochMilli());
+        this.timeStamp = eventMessage.getTimestamp().toString();
         this.type = eventMessage.getType();
         this.aggregateIdentifier = eventMessage.getAggregateIdentifier();
         this.sequenceNumber = eventMessage.getSequenceNumber();
     }
 
-    protected DomainEventEntry() {
+    protected SnapshotEventEntry() {
     }
 
     @Override
@@ -76,11 +70,6 @@ public class DomainEventEntry implements DomainEventData<byte[]>, TrackedEventDa
     }
 
     @Override
-    public TrackingToken trackingToken() {
-        return new TransactionTrackingToken(transactionIndex);
-    }
-
-    @Override
     public String getEventIdentifier() {
         return eventIdentifier;
     }
@@ -88,28 +77,24 @@ public class DomainEventEntry implements DomainEventData<byte[]>, TrackedEventDa
     @Override
     @Transient
     public Instant getTimestamp() {
-        return timeStamp.toInstant();
+        return Instant.parse(timeStamp);
     }
 
     @Override
     @Transient
     @SuppressWarnings("unchecked")
     public SerializedObject<byte[]> getMetaData() {
-        return new SerializedMetaData<>(metaDataBuffer != null ? metaDataBuffer.array() : null, byte[].class);
+        return new SerializedMetaData<>(metaDataBuffer.array(), byte[].class);
     }
 
     @Override
     @Transient
     @SuppressWarnings("unchecked")
     public SerializedObject<byte[]> getPayload() {
-        return new SimpleSerializedObject<>(payloadBuffer != null ? payloadBuffer.array() : null, byte[].class, getPayloadType());
+        return new SimpleSerializedObject<>(payloadBuffer.array(), byte[].class, getPayloadType());
     }
 
     protected SerializedType getPayloadType() {
         return new SimpleSerializedType(payloadType, payloadRevision);
-    }
-
-    void setTransactionIndex(long transactionIndex) {
-        this.transactionIndex = transactionIndex;
     }
 }

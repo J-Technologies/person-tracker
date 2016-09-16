@@ -2,7 +2,8 @@ package nl.ordina.personen.handlers
 
 import com.datastax.driver.core.Cluster
 import com.datastax.driver.mapping.MappingManager
-import nl.ordina.personen.event.cassandra.CassandraTokenStore
+import nl.ordina.personen.cassandra
+import nl.ordina.personen.cassandra.CassandraTokenStore
 import org.axonframework.serialization.xml.XStreamSerializer
 
 /**
@@ -10,7 +11,9 @@ import org.axonframework.serialization.xml.XStreamSerializer
   */
 package object json {
 
-  private lazy val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
+  private val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
+  cassandra.createSchemaIfNotExists(cluster, "json")
+
   private lazy val session = cluster.connect("json")
   private lazy val serializer = new XStreamSerializer()
   lazy val tokenStore = new CassandraTokenStore(session, serializer)

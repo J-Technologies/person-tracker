@@ -1,4 +1,4 @@
-package nl.ordina.personen.event.cassandra;
+package nl.ordina.personen.cassandra;
 
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;

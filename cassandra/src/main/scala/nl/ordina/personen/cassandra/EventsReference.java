@@ -1,4 +1,4 @@
-package nl.ordina.personen.event.cassandra;
+package nl.ordina.personen.cassandra;
 
 /**
  * Created by gle21221 on 10-9-2016.

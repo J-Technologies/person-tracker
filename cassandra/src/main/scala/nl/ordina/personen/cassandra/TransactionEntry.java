@@ -1,4 +1,4 @@
-package nl.ordina.personen.event.cassandra;
+package nl.ordina.personen.cassandra;
 
 import com.datastax.driver.core.TupleType;
 import com.datastax.driver.core.TupleValue;
