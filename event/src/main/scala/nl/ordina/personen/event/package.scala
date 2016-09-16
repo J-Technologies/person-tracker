@@ -9,21 +9,20 @@ import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
 
 package object event {
 
-  private val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
-  cassandra.createSchemaIfNotExists(cluster, "axon")
-
-  private lazy val session = cluster.connect("axon")
   lazy val transactionManager = NoTransactionManager.INSTANCE
-  private lazy val eventStorageEngine = new CassandraEventStorageEngine(session, transactionManager)
+  cassandra.createSchemaIfNotExists(cluster, "axon")
   lazy val eventStore = new EmbeddedEventStore(eventStorageEngine)
+  private lazy val session = cluster.connect("axon")
+  private lazy val eventStorageEngine = new CassandraEventStorageEngine(session, transactionManager)
+  private val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
 
   case class PersoonGeboren(
-                             bsn: Burgerservicenummer,
-                             naam: SamengesteldeNaam,
-                             geslacht: Geslachtsaanduiding,
-                             geboorte: Geboorte,
-                             bijhoudingspartij: Partij
-                           )
+    bsn: Burgerservicenummer,
+    naam: SamengesteldeNaam,
+    geslacht: Geslachtsaanduiding,
+    geboorte: Geboorte,
+    bijhoudingspartij: Partij
+  )
 
   case class PersoonOverleden(
     bsn: Burgerservicenummer,
@@ -31,4 +30,5 @@ package object event {
   )
 
   case class HuwelijkGecreeërd()
+
 }

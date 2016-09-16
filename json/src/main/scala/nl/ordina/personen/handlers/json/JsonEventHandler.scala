@@ -9,7 +9,10 @@ import scala.collection.mutable
 
 class JsonEventHandler {
 
-  val eventProcessor = new TrackingEventProcessor("json", new SimpleEventHandlerInvoker(this), event.eventStore, json.tokenStore)
+  val eventProcessor = new TrackingEventProcessor("json",
+    new SimpleEventHandlerInvoker(this),
+    event.eventStore,
+    json.tokenStore)
   val queue = new mutable.Queue[String]()
 
   def start(): Unit = eventProcessor.start()

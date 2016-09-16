@@ -17,7 +17,9 @@ package object cassandra {
     val statements = script.split(";").transform(s => s.trim).filter(s => s.nonEmpty)
 
     val session = cluster.newSession()
-    session.execute("CREATE KEYSPACE IF NOT EXISTS \"" + keyspace + "\" WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 1 };")
+    session
+      .execute("CREATE KEYSPACE IF NOT EXISTS \"" + keyspace + "\" WITH REPLICATION = { 'class' : " +
+        "'NetworkTopologyStrategy', 'datacenter1' : 1 };")
     session.execute("USE \"" + keyspace + "\";")
     statements.foreach(s => session.execute(s))
     session.close()

@@ -10,7 +10,6 @@ import org.scalatest.{FunSuite, Matchers}
 
 class OverlijdenPersoonTest extends FunSuite with Matchers {
 
-  private var bsn: Burgerservicenummer = Burgerservicenummer.nieuw
   private val geboren: PersoonGeboren = PersoonGeboren(
     bsn,
     SamengesteldeNaam(Voornamen("Dirk"), Geslachtsnaam(Geslachtsnaamstam("Luijk"))),
@@ -19,6 +18,7 @@ class OverlijdenPersoonTest extends FunSuite with Matchers {
     Partij("000505")
   )
   private val overleden: PersoonOverleden = PersoonOverleden(bsn, Overlijden(Datum.gisteren, Gemeente("0505")))
+  private var bsn: Burgerservicenummer = Burgerservicenummer.nieuw
   private var fixture = Fixtures.newGivenWhenThenFixture(classOf[NatuurlijkPersoon])
 
   test("een bestaande, levende persoon is overleden") {

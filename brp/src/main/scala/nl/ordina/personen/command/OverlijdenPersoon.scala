@@ -7,6 +7,6 @@ import org.axonframework.commandhandling.TargetAggregateIdentifier
 import scala.annotation.meta.field
 
 case class OverlijdenPersoon(
-                              @(TargetAggregateIdentifier@field) burgerservicenummer: Burgerservicenummer,
-                              overlijden: Overlijden
-                            )
+  @(TargetAggregateIdentifier@field) burgerservicenummer: Burgerservicenummer,
+  overlijden: Overlijden
+)

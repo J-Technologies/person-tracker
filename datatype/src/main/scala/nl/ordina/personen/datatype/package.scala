@@ -11,32 +11,17 @@ import scala.util.matching.Regex
 
 package object datatype {
 
-  sealed abstract class JaOfNee
-  object JaOfNee {
-    object Ja extends JaOfNee
-    object Nee extends JaOfNee
+  def controle(assertion: Boolean, regel: ControleRegel, argumenten: Any*): Unit = {
+    if (!assertion) throw new ControleRegelException(regel, argumenten: _*)
   }
+
+  sealed abstract class JaOfNee
 
   sealed abstract class SoortPersoon(val code: String, val naam: String)
-  object SoortPersoon {
-    case object INGESCHREVENE extends SoortPersoon("I", "Ingeschrevene")
-    case object NIET_INGESCHREVENE extends SoortPersoon("N", "Niet-ingeschrevene")
-    case object GERELATEERDE extends SoortPersoon("G", "Gerelateerde")
-  }
 
   sealed abstract class Geslachtsaanduiding(val code: String, val naam: String)
-  object Geslachtsaanduiding {
 
-    def fromString(geslacht: String): Geslachtsaanduiding = geslacht match {
-      case "man" => MAN
-      case "vrouw" => VROUW
-      case "onbekend" => ONBEKEND
-    }
-
-    case object MAN extends Geslachtsaanduiding("M", "Man")
-    case object VROUW extends Geslachtsaanduiding("V", "Vrouw")
-    case object ONBEKEND extends Geslachtsaanduiding("O", "Onbekend")
-  }
+  sealed abstract case class Bijhoudingsaard(code: String, omschrijving: String)
 
   abstract class SimpleValueObject[T](value: T) {
     override def toString: String = value.toString
@@ -68,36 +53,17 @@ package object datatype {
     assert(contains, s"$value komt niet voor in de lijst van toegestane voorvoegsels")
   }
 
-  case class Datum(value: LocalDate) extends SimpleValueObject(value) with Ordered[Datum] {
-    override def compare(that: Datum): Int = this.value.compareTo(that.value)
-    def +(dagen: Int): Datum = Datum(value.plusDays(dagen))
-    def -(dagen: Int): Datum = Datum(value.minusDays(dagen))
-  }
-  object Datum {
-    def apply(value: Instant): Datum = apply(value.atZone(ZoneId.systemDefault).toLocalDate)
-    def vandaag: Datum = apply(Instant.now)
-    def morgen: Datum = vandaag + 1
-    def gisteren: Datum = vandaag - 1
-    def apply(value: String): Datum = {
-      if (value.contains("-")) apply(LocalDate.parse(value))
-      else apply(LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE))
-    }
-  }
-
-  sealed abstract case class Bijhoudingsaard(code: String, omschrijving: String)
-  object Bijhoudingsaard {
-    object INGEZETENE extends Bijhoudingsaard("I", "Ingezetene")
-    object NIET_INGEZETENE extends Bijhoudingsaard("N", "Niet-ingezetene")
-    object ONBEKEND extends Bijhoudingsaard("?", "Onbekend")
-  }
-
   sealed case class ErnstControleRegel(code: String, naam: String)
-  object BLOKKEREND extends ErnstControleRegel("B", "Blokkerend")
-  object DEBLOKKEERBAAR extends ErnstControleRegel("D", "Deblokkeerbaar")
-  object WAARSCHUWING extends ErnstControleRegel("W", "Waarschuwing")
 
   sealed case class ControleRegel(code: String, omschrijving: String, ernst: ErnstControleRegel)
-  object BRAL0012 extends ControleRegel("BRAL0012", "%s moet voldoen aan de elfproef", BLOKKEREND)
+
+  case class Datum(value: LocalDate) extends SimpleValueObject(value) with Ordered[Datum] {
+    override def compare(that: Datum): Int = this.value.compareTo(that.value)
+
+    def +(dagen: Int): Datum = Datum(value.plusDays(dagen))
+
+    def -(dagen: Int): Datum = Datum(value.minusDays(dagen))
+  }
 
   case class ControleRegelException(regel: ControleRegel, argumenten: Any*) extends Exception(regel.omschrijving) {
     override def getMessage: String = {
@@ -105,7 +71,74 @@ package object datatype {
     }
   }
 
-  def controle(assertion: Boolean, regel: ControleRegel, argumenten: Any*): Unit = {
-    if (!assertion) throw new ControleRegelException(regel, argumenten: _*)
+  object JaOfNee {
+
+    object Ja extends JaOfNee
+
+    object Nee extends JaOfNee
+
   }
+
+  object SoortPersoon {
+
+    case object INGESCHREVENE extends SoortPersoon("I", "Ingeschrevene")
+
+    case object NIET_INGESCHREVENE extends SoortPersoon("N", "Niet-ingeschrevene")
+
+    case object GERELATEERDE extends SoortPersoon("G", "Gerelateerde")
+
+  }
+
+  object Geslachtsaanduiding {
+
+    def fromString(geslacht: String): Geslachtsaanduiding = geslacht match {
+      case "man" => MAN
+      case "vrouw" => VROUW
+      case "onbekend" => ONBEKEND
+    }
+
+    case object MAN extends Geslachtsaanduiding("M", "Man")
+
+    case object VROUW extends Geslachtsaanduiding("V", "Vrouw")
+
+    case object ONBEKEND extends Geslachtsaanduiding("O", "Onbekend")
+
+  }
+
+  object Datum {
+    def morgen: Datum = vandaag + 1
+
+    def vandaag: Datum = apply(Instant.now)
+
+    def apply(value: Instant): Datum = apply(value.atZone(ZoneId.systemDefault).toLocalDate)
+
+    def gisteren: Datum = vandaag - 1
+
+    def apply(value: String): Datum = {
+      if (value.contains("-")) {
+        apply(LocalDate.parse(value))
+      }
+      else {
+        apply(LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE))
+      }
+    }
+  }
+
+  object Bijhoudingsaard {
+
+    object INGEZETENE extends Bijhoudingsaard("I", "Ingezetene")
+
+    object NIET_INGEZETENE extends Bijhoudingsaard("N", "Niet-ingezetene")
+
+    object ONBEKEND extends Bijhoudingsaard("?", "Onbekend")
+
+  }
+
+  object BLOKKEREND extends ErnstControleRegel("B", "Blokkerend")
+
+  object DEBLOKKEERBAAR extends ErnstControleRegel("D", "Deblokkeerbaar")
+
+  object WAARSCHUWING extends ErnstControleRegel("W", "Waarschuwing")
+
+  object BRAL0012 extends ControleRegel("BRAL0012", "%s moet voldoen aan de elfproef", BLOKKEREND)
 }

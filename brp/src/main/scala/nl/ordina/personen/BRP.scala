@@ -1,8 +1,5 @@
 package nl.ordina.personen
 
-import nl.ordina.personen.command.{GeboorteInNederland, OverlijdenPersoon}
-import nl.ordina.personen.datatype._
-import nl.ordina.personen.datatype.groep.{Geboorte, Overlijden}
 import nl.ordina.personen.domein.entity.NatuurlijkPersoon
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
 import org.axonframework.commandhandling.{AggregateAnnotationCommandHandler, SimpleCommandBus}
