@@ -13,7 +13,9 @@ import org.axonframework.eventhandling.{EventHandler, SimpleEventHandlerInvoker,
 
 class EventHandlerActor extends ActorPublisher[Message] {
 
-  val eventProcessor = new SubscribingEventProcessor("eventActor", new SimpleEventHandlerInvoker(this), event.eventStore)
+  val eventProcessor = new SubscribingEventProcessor("eventActor",
+    new SimpleEventHandlerInvoker(this),
+    event.eventStore)
 
   @scala.throws[Exception](classOf[Exception])
   override def preStart(): Unit = eventProcessor.start()

@@ -1,9 +1,9 @@
 package nl.ordina.personen.handlers
 
-import javax.persistence.Persistence
-
-import nl.ordina.personen.event.{JpaTransactionManager, JpaTransactionTokenStore}
-import org.axonframework.common.jpa.SimpleEntityManagerProvider
+import com.datastax.driver.core.Cluster
+import com.datastax.driver.mapping.MappingManager
+import nl.ordina.personen.cassandra
+import nl.ordina.personen.cassandra.CassandraTokenStore
 import org.axonframework.serialization.xml.XStreamSerializer
 
 /**
@@ -11,11 +11,11 @@ import org.axonframework.serialization.xml.XStreamSerializer
   */
 package object json {
 
-  private lazy val entityManagerFactory = Persistence.createEntityManagerFactory("JSON")
-  private lazy val entityManagerProvider = new SimpleEntityManagerProvider(entityManagerFactory.createEntityManager())
+  lazy val tokenStore = new CassandraTokenStore(session, serializer)
+  cassandra.createSchemaIfNotExists(cluster, "json")
+  lazy val persoonMapper = new MappingManager(session).mapper(classOf[PersoonEntry])
+  private lazy val session = cluster.connect("json")
   private lazy val serializer = new XStreamSerializer()
-  private lazy val transactionManager = JpaTransactionManager(entityManagerProvider)
-  lazy val tokenStore = JpaTransactionTokenStore(entityManagerProvider, serializer, transactionManager)
-  lazy val jsonRepository = JsonRepository(entityManagerProvider, transactionManager)
+  private val cluster = Cluster.builder().addContactPoint("127.0.0.1").build()
 
 }

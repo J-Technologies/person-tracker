@@ -4,7 +4,7 @@
 
 package nl.ordina.personen.domein.entity
 
-import nl.ordina.personen.command.{Huwelijk, GeboorteInNederland, OverlijdenPersoon}
+import nl.ordina.personen.command.{GeboorteInNederland, Huwelijk, OverlijdenPersoon}
 import nl.ordina.personen.datatype.Bijhoudingsaard.INGEZETENE
 import nl.ordina.personen.datatype.Geslachtsaanduiding.ONBEKEND
 import nl.ordina.personen.datatype.SoortPersoon.INGESCHREVENE
@@ -44,10 +44,11 @@ class NatuurlijkPersoon extends Persoon(INGESCHREVENE) {
 
   @CommandHandler
   def handle(command: OverlijdenPersoon) = {
-    if (overlijden != null)
+    if (overlijden != null) {
       throw new IllegalStateException(
         s"Persoon met burgerservicenummer ${command.burgerservicenummer} is reeds overleden"
       )
+    }
     AggregateLifecycle.apply(PersoonOverleden(command.burgerservicenummer, command.overlijden))
   }
 

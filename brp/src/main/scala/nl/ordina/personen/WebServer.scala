@@ -114,10 +114,11 @@ class WebServer(commandGateway: CommandGateway) {
       }
 
   def createNewGeboorte(voornaam: String,
-                        achternaam: String,
-                        geboortedatum: String,
-                        geslacht: Geslachtsaanduiding,
-                        gemeente: String, partij: String): GeboorteInNederland =
+    achternaam: String,
+    geboortedatum: String,
+    geslacht: Geslachtsaanduiding,
+    gemeente: String, partij: String
+  ): GeboorteInNederland =
     GeboorteInNederland(
       Burgerservicenummer.nieuw,
       SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
@@ -132,9 +133,6 @@ class WebServer(commandGateway: CommandGateway) {
     overlijden = Overlijden(Datum(datum), Gemeente(gemeente))
   )
 
-  def createHuwelijk(bsn: List[String], datum: String, gemeente: String): Huwelijk =Huwelijk(bsn.map(Burgerservicenummer(_)), Datum(datum), Gemeente(gemeente))
-}
-
-object WebServer {
-  def apply(commandGateway: CommandGateway): WebServer = new WebServer(commandGateway)
+  def createHuwelijk(bsn: List[String], datum: String, gemeente: String): Huwelijk = Huwelijk(bsn
+    .map(Burgerservicenummer(_)), Datum(datum), Gemeente(gemeente))
 }

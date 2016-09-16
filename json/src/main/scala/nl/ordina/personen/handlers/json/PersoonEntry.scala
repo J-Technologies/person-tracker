@@ -1,8 +1,18 @@
 package nl.ordina.personen.handlers.json
 
-import javax.persistence.{Basic, Entity, Id}
+import com.datastax.driver.mapping.annotations.{Column, PartitionKey, Table}
 
 import scala.annotation.meta.field
 
-@Entity
-case class PersoonEntry(@(Id@field) bsn: String, @(Basic@field) naam: String, @(Basic@field) isOverleden: Boolean)
+@Table(name = "PersoonEntry", caseSensitiveTable = true)
+case class PersoonEntry(@(Column@field)(caseSensitive = true)
+@(PartitionKey@field)
+bsn: String,
+  @(Column@field)(caseSensitive = true)
+  naam: String,
+  @(Column@field)(caseSensitive = true)
+  overleden: Boolean
+) {
+  // needed by the datastax mapper
+  def this() = this(null, null, false)
+}

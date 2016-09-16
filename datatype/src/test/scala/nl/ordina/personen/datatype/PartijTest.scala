@@ -10,6 +10,6 @@ class PartijTest extends FunSuite with Matchers {
 
     partij.code.value should be("000505")
     partij.naam.value should be("Gemeente Dordrecht")
-    partij.soort should be (GEMEENTE)
+    partij.soort should be(GEMEENTE)
   }
 }

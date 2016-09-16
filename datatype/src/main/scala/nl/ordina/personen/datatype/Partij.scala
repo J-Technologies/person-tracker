@@ -8,6 +8,7 @@ case class Partij(
   naam: Partijnaam,
   soort: SoortPartij
 )
+
 object Partij {
   private val xml = XML.load(Source.fromURL(getClass.getResource("Partij.xml")).reader())
   private val lijst: Map[String, Partij] = (xml \\ "partij").map {
@@ -21,15 +22,23 @@ object Partij {
         SoortPartij(soort)
       )
   }.map(g => g.code.value -> g).toMap
+
   def apply(value: String): Partij = lijst(value)
+
   def apply(code: Partijcode): Partij = lijst(code.value)
 }
 
 case class Partijcode(value: String) extends StringMetBeperkteLengte(value, 6)
+
 case class Partijnaam(value: String) extends StringMetBeperkteLengte(value, 80)
+
 sealed case class SoortPartij(value: Int, naam: String)
+
 object SoortPartij {
-  object GEMEENTE extends SoortPartij(1, "Gemeente")
+
   val lijst: Map[Int, SoortPartij] = Map(GEMEENTE.value -> GEMEENTE)
+
   def apply(value: Int) = lijst(value)
+
+  object GEMEENTE extends SoortPartij(1, "Gemeente")
 }
