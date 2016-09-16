@@ -15,6 +15,8 @@ class OverlijdenPersoonTest extends FunSuite with Matchers {
     SamengesteldeNaam(Voornamen("Dirk"), Geslachtsnaam(Geslachtsnaamstam("Luijk"))),
     MAN,
     Geboorte(Datum("1993-01-01"), Gemeente("0505")),
+    List(Burgerservicenummer.nieuw, Burgerservicenummer.nieuw),
+    Adres("1234321", "0034", "Herfststraat", 36, "1234AB"),
     Partij("000505")
   )
   private val overleden: PersoonOverleden = PersoonOverleden(bsn, Overlijden(Datum.gisteren, Gemeente("0505")))

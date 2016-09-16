@@ -1,6 +1,5 @@
 package nl.ordina.personen.cassandra;
 
-import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
@@ -100,10 +99,9 @@ public class CassandraEventStorageEngine extends CassandraReadOnlyEventStorageEn
     }
 
     private Statement updateCounter(String name, long value) {
-        PreparedStatement result = session.prepare("UPDATE " + quoted("Counters") +
+        return session.prepare("UPDATE " + quoted("Counters") +
                 " SET " + quoted("value") + " = ?" +
-                " WHERE " + quoted("name") + " = ?");
-        return result.bind(value, name);
+                " WHERE " + quoted("name") + " = ?").bind(value, name);
     }
 
     private static DomainEventEntry asDomainEventEntry(DomainEventMessage<?> eventMessage, Serializer serializer, long transactionIndex) {

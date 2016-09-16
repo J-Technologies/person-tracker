@@ -6,6 +6,7 @@ package nl.ordina.personen
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDate, ZoneId}
+import java.util.Date
 
 import scala.util.matching.Regex
 
@@ -20,6 +21,8 @@ package object datatype {
   sealed abstract class SoortPersoon(val code: String, val naam: String)
 
   sealed abstract class Geslachtsaanduiding(val code: String, val naam: String)
+
+  sealed abstract class BurgelijkeStaat(val code: String, val naam: String)
 
   sealed abstract case class Bijhoudingsaard(code: String, omschrijving: String)
 
@@ -134,6 +137,16 @@ package object datatype {
 
   }
 
+  object BurgelijkeStaat {
+
+    object ONGEHUWD extends BurgelijkeStaat("O", "Ongehuwd")
+
+    object GEHUWD extends BurgelijkeStaat("G", "Gehuwd")
+
+    object ONBEKEND extends BurgelijkeStaat("?", "Onbekend")
+
+  }
+
   object BLOKKEREND extends ErnstControleRegel("B", "Blokkerend")
 
   object DEBLOKKEERBAAR extends ErnstControleRegel("D", "Deblokkeerbaar")
@@ -141,4 +154,5 @@ package object datatype {
   object WAARSCHUWING extends ErnstControleRegel("W", "Waarschuwing")
 
   object BRAL0012 extends ControleRegel("BRAL0012", "%s moet voldoen aan de elfproef", BLOKKEREND)
+
 }

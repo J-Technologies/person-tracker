@@ -8,7 +8,12 @@ CREATE TABLE IF NOT EXISTS "TokenEntry" (
 );
 CREATE TABLE IF NOT EXISTS "PersoonEntry" (
 	"bsn" varchar, 
-	"naam" varchar, 
+	"naam" varchar,
+	"geslacht" varchar,
+	"geboortedatum" varchar,
+	"ouders" list<varchar>,
+	"burgelijkeStaat" varchar,
+	"partner" varchar,
 	"overleden" boolean,
  	PRIMARY KEY("bsn")
 );

@@ -62,15 +62,15 @@ class WebServer(commandGateway: CommandGateway) {
         path("geboorte") {
           post {
             formFieldMap { fields =>
-              commandGateway.sendAndWait(
-                createNewGeboorte(
-                  fields.getOrElse("voornaam", ""),
-                  fields.getOrElse("achternaam", ""),
-                  fields.getOrElse("geboortedatum", ""),
-                  Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
-                  fields.getOrElse("gemeente", ""),
-                  fields.getOrElse("partij", "")
-                ))
+              createNewGeboorte(
+                fields.getOrElse("voornaam", ""),
+                fields.getOrElse("achternaam", ""),
+                fields.getOrElse("geboortedatum", ""),
+                Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
+                List(fields.getOrElse("ouder1", ""), fields.getOrElse("ouder2", "")),
+                fields.getOrElse("gemeente", ""),
+                fields.getOrElse("partij", "")
+              )
 
               complete(HttpResponse()
                 .withEntity("Geboorte commando received")
@@ -80,12 +80,11 @@ class WebServer(commandGateway: CommandGateway) {
         } ~ path("overlijden") {
           post {
             formFieldMap { fields =>
-              commandGateway.sendAndWait(
-                createOverlijden(
-                  fields.getOrElse("bsn", ""),
-                  fields.getOrElse("datum", ""),
-                  fields.getOrElse("gemeente", "")
-                ))
+              createOverlijden(
+                fields.getOrElse("bsn", ""),
+                fields.getOrElse("datum", ""),
+                fields.getOrElse("gemeente", "")
+              )
               complete(HttpResponse()
                 .withEntity("Overlijden commando received")
                 .withHeaders(`Access-Control-Allow-Origin` *))
@@ -95,12 +94,12 @@ class WebServer(commandGateway: CommandGateway) {
         } ~ path("huwelijk") {
           post {
             formFieldMap { fields =>
-              commandGateway.sendAndWait(
-                createHuwelijk(
-                  List(fields.getOrElse("bsn1", ""), fields.getOrElse("bsn2", "")),
-                  fields.getOrElse("datum", ""),
-                  fields.getOrElse("gemeente", "")
-                ))
+              createHuwelijk(
+                fields.getOrElse("bsn1", ""),
+                fields.getOrElse("bsn2", ""),
+                fields.getOrElse("datum", ""),
+                fields.getOrElse("gemeente", "")
+              )
               complete(HttpResponse()
                 .withEntity("Huwelijk commando received")
                 .withHeaders(`Access-Control-Allow-Origin` *))
@@ -117,22 +116,46 @@ class WebServer(commandGateway: CommandGateway) {
     achternaam: String,
     geboortedatum: String,
     geslacht: Geslachtsaanduiding,
-    gemeente: String, partij: String
-  ): GeboorteInNederland =
-    GeboorteInNederland(
-      Burgerservicenummer.nieuw,
-      SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
-      geslacht,
-      Geboorte(Datum(geboortedatum), Gemeente(gemeente)), List(), null,
-      Partij(partij)
+    ouders: List[String],
+    gemeente: String,
+    partij: String
+  ): Unit =
+    commandGateway.sendAndWait(
+      GeboorteInNederland(
+        Burgerservicenummer.nieuw,
+        SamengesteldeNaam(Voornamen(voornaam), Geslachtsnaam(Geslachtsnaamstam(achternaam))),
+        geslacht,
+        Geboorte(Datum(geboortedatum), Gemeente(gemeente)),
+        ouders.filter(s => s.nonEmpty).map(s => Burgerservicenummer(s)),
+        null,
+        Partij(partij)
+      )
     )
 
+  def createOverlijden(bsn: String, datum: String, gemeente: String): Unit =
+    commandGateway.sendAndWait(
+      OverlijdenPersoon(
+        burgerservicenummer = Burgerservicenummer(bsn),
+        overlijden = Overlijden(Datum(datum), Gemeente(gemeente))
+      )
+    )
 
-  def createOverlijden(bsn: String, datum: String, gemeente: String): OverlijdenPersoon = OverlijdenPersoon(
-    burgerservicenummer = Burgerservicenummer(bsn),
-    overlijden = Overlijden(Datum(datum), Gemeente(gemeente))
-  )
-
-  def createHuwelijk(bsn: List[String], datum: String, gemeente: String): Huwelijk = Huwelijk(bsn
-    .map(Burgerservicenummer(_)), Datum(datum), Gemeente(gemeente))
+  def createHuwelijk(bsn1: String, bsn2: String, datum: String, gemeente: String): Unit = {
+    commandGateway.sendAndWait(
+      Huwelijk(
+        burgerservicenummer = Burgerservicenummer(bsn1),
+        partner = Burgerservicenummer(bsn2),
+        datum = Datum(datum),
+        gemeente = Gemeente(gemeente)
+      )
+    )
+    commandGateway.sendAndWait(
+      Huwelijk(
+        burgerservicenummer = Burgerservicenummer(bsn2),
+        partner = Burgerservicenummer(bsn1),
+        datum = Datum(datum),
+        gemeente = Gemeente(gemeente)
+      )
+    )
+  }
 }

@@ -24,7 +24,7 @@ class GeboorteInNederlandTest extends FunSuite with Matchers {
     )
 
     fixture.givenNoPriorActivity().when(geboorte).expectEvents(
-      PersoonGeboren(bsn, geboorte.naam, geboorte.geslacht, geboorte.geboorte, geboorte.bijhoudingspartij)
+      PersoonGeboren(bsn, geboorte.naam, geboorte.geslacht, geboorte.geboorte, geboorte.ouders, geboorte.adres, geboorte.bijhoudingspartij)
     )
   }
 

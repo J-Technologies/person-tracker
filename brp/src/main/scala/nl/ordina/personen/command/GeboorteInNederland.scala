@@ -4,8 +4,10 @@ import nl.ordina.personen.datatype._
 import nl.ordina.personen.datatype.groep.Geboorte
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 
+import scala.annotation.meta.field
+
 case class GeboorteInNederland(
-  @TargetAggregateIdentifier burgerservicenummer: Burgerservicenummer,
+  @(TargetAggregateIdentifier@field) burgerservicenummer: Burgerservicenummer,
   naam: SamengesteldeNaam,
   geslacht: Geslachtsaanduiding = null,
   geboorte: Geboorte,

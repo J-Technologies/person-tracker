@@ -20,6 +20,8 @@ package object event {
     naam: SamengesteldeNaam,
     geslacht: Geslachtsaanduiding,
     geboorte: Geboorte,
+    ouders: List[Burgerservicenummer],
+    adres: Adres,
     bijhoudingspartij: Partij
   )
 
@@ -28,6 +30,11 @@ package object event {
     overlijden: Overlijden
   )
 
-  case class HuwelijkGecreeërd()
+  case class HuwelijkGecreeërd(
+    bsn: Burgerservicenummer,
+    partner: Burgerservicenummer,
+    datum: Datum,
+    gemeente: Gemeente
+  )
 
 }

@@ -1,7 +1,13 @@
 package nl.ordina.personen.command
 
 import nl.ordina.personen.datatype.{Burgerservicenummer, Datum, Gemeente}
+import org.axonframework.commandhandling.TargetAggregateIdentifier
 
-case class Huwelijk(gehuwden: List[Burgerservicenummer], datum: Datum, gemeente: Gemeente) {
-  assert(gehuwden.size == 2)
-}
+import scala.annotation.meta.field
+
+case class Huwelijk(
+  @(TargetAggregateIdentifier@field) burgerservicenummer: Burgerservicenummer,
+  partner: Burgerservicenummer,
+  datum: Datum,
+  gemeente: Gemeente
+)
