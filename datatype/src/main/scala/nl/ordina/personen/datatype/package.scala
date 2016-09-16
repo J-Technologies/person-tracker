@@ -7,6 +7,8 @@ package nl.ordina.personen
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDate, ZoneId}
 
+import scala.util.matching.Regex
+
 package object datatype {
 
   sealed abstract class JaOfNee
@@ -25,7 +27,7 @@ package object datatype {
   sealed abstract class Geslachtsaanduiding(val code: String, val naam: String)
   object Geslachtsaanduiding {
 
-    def fromString(geslacht: String):Geslachtsaanduiding = geslacht match {
+    def fromString(geslacht: String): Geslachtsaanduiding = geslacht match {
       case "man" => MAN
       case "vrouw" => VROUW
       case "onbekend" => ONBEKEND
@@ -46,6 +48,19 @@ package object datatype {
 
   abstract class StringMetBeperkteLengte(value: String, length: Int) extends SimpleValueObject(value) {
     assert(value.length <= length, s"lengte is ${value.length}, maar mag maximaal $length zijn")
+  }
+
+  abstract class NummerMetBeperkteLengte(value: Int, length: Int) extends SimpleValueObject(value) {
+    private val valueAsString: String = value.toString
+    assert(valueAsString.length <= length, s"lengte is ${valueAsString.length}, maar mag maximaal $length zijn")
+  }
+
+  abstract class StringMetRegex(value: String, regex: Regex) extends SimpleValueObject(value) {
+    private val result: Boolean = value match {
+      case regex(_*) => true
+      case _ => false
+    }
+    assert(result, s"$value is geen geldige postcode")
   }
 
   abstract class Waardenlijst[T](value: T, lijst: Set[T]) extends SimpleValueObject {
@@ -86,7 +101,7 @@ package object datatype {
 
   case class ControleRegelException(regel: ControleRegel, argumenten: Any*) extends Exception(regel.omschrijving) {
     override def getMessage: String = {
-      super.getMessage.format(argumenten : _*)
+      super.getMessage.format(argumenten: _*)
     }
   }
 

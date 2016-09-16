@@ -12,9 +12,10 @@ case class Gemeente(
 ) {
   lazy val voortzettendeGemeente: Option[Gemeente] = voortzettendeGemeenteCode.map(c => Gemeente(c.value))
 }
+
 object Gemeente {
   private val xml = XML.load(Source.fromURL(getClass.getResource("Gemeente.xml")).reader())
-  private val lijst: Map[String, Gemeente] = (xml \\ "gemeente").map {
+  private val codeLijst: Map[String, Gemeente] = (xml \\ "gemeente").map {
     node =>
       val code = (node \ "code").text
       val naam = (node \ "naam").text
@@ -29,11 +30,17 @@ object Gemeente {
         if (einde.nonEmpty) Some(Datum(einde)) else None
       )
   }.map(g => g.code.value -> g).toMap
-  def apply(value: String): Gemeente = lijst(value)
-  def apply(code: Gemeentecode): Gemeente = lijst(code.value)
+  private val naamLijst: Map[String, Gemeente] = codeLijst.map(g => g._2.naam.value -> g._2)
+
+  def apply(value: String): Gemeente = codeLijst.getOrElse(value, naamLijst(value))
+
+  def apply(code: Gemeentecode): Gemeente = codeLijst(code.value)
+
+  def apply(naam: Gemeentenaam): Gemeente = naamLijst(naam.value)
 }
 
 case class Gemeentecode(value: String) extends StringMetBeperkteLengte(value, 4)
+
 case class Gemeentenaam(value: String) extends StringMetBeperkteLengte(value, 80)
 
 

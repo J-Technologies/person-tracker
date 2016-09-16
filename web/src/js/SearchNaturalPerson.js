@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import InputField from "./form/InputField";
 import SubmitButton from "./form/SubmitButton";
 
-
 export default class SearchNaturalPerson extends Component {
 
     constructor(props) {
@@ -23,6 +22,8 @@ export default class SearchNaturalPerson extends Component {
         return (
             <div>
                 <h1>Zoek natuurlijk persoon op</h1>
+                <hr/>
+
                 <form className="form-horizontal" id="searchPerson" onSubmit={
                     e => {
                         e.preventDefault();

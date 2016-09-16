@@ -1,51 +1,32 @@
 import React, {Component} from "react";
-import HeaderNav from "./HeaderNav";
+import Header from "./header/Header";
+import Nav from "./header/Nav";
 import Output from "./Output";
-import CreateNaturalPerson from "./CreateNaturalPerson";
-import SearchNaturalPerson from "./SearchNaturalPerson";
-
+import {Link} from "react-router";
 
 export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            menu: [ "Creeër persoon", "Zoek persoon" ],
-            active: "Creeër persoon"
-        }
-    }
-
-    static renderView(menu) {
-        switch(menu) {
-            case "Creeër persoon":
-                return <CreateNaturalPerson />;
-            case "Zoek persoon":
-                return <SearchNaturalPerson />;
-        }
     }
 
     render() {
-        const {menu, active} = this.state;
-
         return (
             <div>
+                <Header title="BRP">
+                    <Nav to="/createNaturalPerson" label="Creeër persoon"/>
+                    <Nav to="/searchNaturalPerson" label="Zoek persoon"/>
+                    <Nav to="/setPersonDeceased" label="Overlijden"/>
+                    <Nav to="/createHuwelijk" label="Huwelijk"/>
+                </Header>
 
-                <HeaderNav title="BRP">
-                    {menu.map(menuItem =>
-                        <li key={menuItem}
-                            className={active === menuItem ? 'active': ''}
-                            onClick={() => this.setState({active: menuItem})}>
+                <div className="content">
 
-                            <a href="#">{menuItem}</a>
+                    {this.props.children}
 
-                        </li>)
-                    }
-                </HeaderNav>
-
-                {App.renderView(active)}
+                </div>
 
                 <Output websocketUrl="ws://localhost:8123/persoon/websocket"/>
-
             </div>
         )
     }

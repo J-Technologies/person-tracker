@@ -26,8 +26,9 @@ package object event {
                            )
 
   case class PersoonOverleden(
-                               bsn: Burgerservicenummer,
-                               overlijden: Overlijden
-                             )
+    bsn: Burgerservicenummer,
+    overlijden: Overlijden
+  )
 
+  case class HuwelijkGecreeërd()
 }
