@@ -8,6 +8,7 @@ import com.datastax.driver.mapping.annotations.Table;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +21,7 @@ public class TransactionEntry {
     @PartitionKey
     private long transactionIndex;
     @Column(caseSensitive = true)
-    private List<TupleValue> eventsReferences;
+    private Set<TupleValue> eventsReferences;
 
     public TransactionEntry(long transactionIndex, Stream<EventsReference> eventsReferences, TupleType eventsReferencesType) {
         this.transactionIndex = transactionIndex;
@@ -30,10 +31,18 @@ public class TransactionEntry {
                         eventsReference.getFirstSequenceNumber(),
                         eventsReference.getLastSequenceNumber())
                 )
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     protected TransactionEntry() {
+    }
+
+    public long getTransactionIndex() {
+        return transactionIndex;
+    }
+
+    public Set<TupleValue> getEventsReferences() {
+        return eventsReferences;
     }
 
     Stream<EventsReference> eventsReferences() {

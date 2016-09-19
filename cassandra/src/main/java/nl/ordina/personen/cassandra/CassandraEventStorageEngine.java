@@ -1,5 +1,6 @@
 package nl.ordina.personen.cassandra;
 
+import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class CassandraEventStorageEngine extends CassandraReadOnlyEventStorageEngine {
 
     final String referencesKey = this + "_REFERENCES";
-    final String statementsKey = this + "_STATEMENTS";
+    final String batchKey = this + "_BATCH";
 
     private final AtomicLong transactionCounter;
 
@@ -43,52 +44,43 @@ public class CassandraEventStorageEngine extends CassandraReadOnlyEventStorageEn
                 .map(EventUtils::asDomainEventMessage)
                 .map(e -> asDomainEventEntry(e, serializer, transactionCounter.get()))
                 .map(eventMapper::saveQuery)
-                .forEachOrdered(statements()::add);
+                .forEachOrdered(batch()::add);
     }
 
     @Override
     protected void storeSnapshot(DomainEventMessage<?> snapshot, Serializer serializer) {
-        statements().add(snapshotMapper.saveQuery(asSnapshotEventEntry(snapshot, serializer)));
+         batch().add(snapshotMapper.saveQuery(asSnapshotEventEntry(snapshot, serializer)));
     }
 
-    private void addReference(DomainEventMessage<?> event) {
-        references()
-                .computeIfAbsent(event.getAggregateIdentifier(), s -> new EventsReference(s, event.getSequenceNumber()))
-                .update(event.getSequenceNumber());
+    private BatchStatement batch() {
+        UnitOfWork<?> root = CurrentUnitOfWork.get().root();
+        return root.getOrComputeResource(batchKey, s -> {
+            BatchStatement batch = new BatchStatement();
+            root.onCommit(unitOfWork -> session.execute(batch));
+            return batch;
+        });
     }
 
     private Map<String, EventsReference> references() {
         UnitOfWork<?> root = CurrentUnitOfWork.get().root();
         return root.getOrComputeResource(referencesKey, s -> {
             Map<String, EventsReference> result = new TreeMap<>();
-            root.onPrepareCommit(this::onPrepareCommitStoreTransaction);
+            root.onPrepareCommit(unitOfWork -> {
+                TransactionEntry transaction = new TransactionEntry(transactionCounter.get(), result.values().stream(), eventsReferencesType);
+                batch().add(updateCounter("transactions", transaction.getTransactionIndex()));
+                batch().add(session.prepare("INSERT INTO " + quoted("TransactionEntry") +
+                        " (" + quoted("transactionIndex", "eventsReference") + ")" +
+                        " VALUES(?,?)").bind(transaction.getTransactionIndex(), transaction.getEventsReferences()));
+            });
+            root.afterCommit(unitOfWork -> transactionCounter.incrementAndGet());
             return result;
         });
     }
 
-    private List<Statement> statements() {
-        UnitOfWork<?> root = CurrentUnitOfWork.get().root();
-        return root.getOrComputeResource(statementsKey, s -> {
-            List<Statement> result = new ArrayList<>();
-            root.onCommit(this::onCommitExecuteStatements);
-            return result;
-        });
-    }
-
-    private void onPrepareCommitStoreTransaction(UnitOfWork<?> unitOfWork) {
-        Map<String, EventsReference> references = unitOfWork.getResource(referencesKey);
-        if (references != null) {
-            long transactionIndex = transactionCounter.getAndIncrement();
-            TransactionEntry transaction = new TransactionEntry(transactionIndex, references.values().stream(), eventsReferencesType);
-            statements().addAll(Arrays.asList(transactionMapper.saveQuery(transaction), updateCounter("transactions", transactionIndex)));
-        }
-    }
-
-    private void onCommitExecuteStatements(UnitOfWork<?> unitOfWork) {
-        List<Statement> statements = unitOfWork.getResource(statementsKey);
-        if (statements != null) {
-            statements.forEach(session::execute);
-        }
+    private void addReference(DomainEventMessage<?> event) {
+        references()
+                .computeIfAbsent(event.getAggregateIdentifier(), s -> new EventsReference(s, event.getSequenceNumber()))
+                .update(event.getSequenceNumber());
     }
 
     private long selectCounter(String name) {

@@ -122,11 +122,11 @@ public class CassandraReadOnlyEventStorageEngine extends BatchingEventStorageEng
                 "transactionIndex");
     }
 
-    static String quoted(String input) {
-        return '"' + input + '"';
+    static String quoted(String... input) {
+        return quoted(Arrays.asList(input));
     }
 
     static String quoted(Iterable<String> input) {
-        return quoted(String.join("\", \"", input));
+        return '"' + String.join("\", \"", input) + '"';
     }
 }

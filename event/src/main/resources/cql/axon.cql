@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "SnapshotEventEntry" (
 );
 CREATE TABLE IF NOT EXISTS "TransactionEntry" (
 	"transactionIndex" bigint, 
-	"eventsReferences" list<frozen<tuple<varchar,bigint,bigint>>>,
+	"eventsReferences" set<frozen<tuple<varchar,bigint,bigint>>>,
  	PRIMARY KEY("transactionIndex")
 );
 CREATE TABLE IF NOT EXISTS "Counters" (
