@@ -58,10 +58,12 @@ class WebServer(commandGateway: CommandGateway) {
           handleWebSocketMessages(echoService)
         }
       } ~
-      pathPrefix("persoon") { handleGeboorte ~ handleOverlijden ~ handleHuwelijk ~
-          path("websocket") {
-            handleWebSocketMessages(eventFlow)
-          }
+      pathPrefix("persoon") {
+        handleGeboorte ~ handleOverlijden ~ handleHuwelijk ~
+
+        path("websocket") {
+          handleWebSocketMessages(eventFlow)
+        }
       }
 
   def handleGeboorte: Route = path("geboorte") {
@@ -72,7 +74,7 @@ class WebServer(commandGateway: CommandGateway) {
           fields.getOrElse("achternaam", ""),
           fields.getOrElse("geboortedatum", ""),
           Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
-          fields.filterKeys( _ startsWith "ouder").values.toList,
+          fields.filterKeys(_ startsWith "ouder").values.toList,
           fields.getOrElse("gemeente", ""),
           fields.getOrElse("partij", "")
         )
