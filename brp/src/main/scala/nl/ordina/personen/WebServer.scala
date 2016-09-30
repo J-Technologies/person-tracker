@@ -58,59 +58,61 @@ class WebServer(commandGateway: CommandGateway) {
           handleWebSocketMessages(echoService)
         }
       } ~
-      pathPrefix("persoon") {
-        path("geboorte") {
-          post {
-            formFieldMap { fields =>
-              createNewGeboorte(
-                fields.getOrElse("voornaam", ""),
-                fields.getOrElse("achternaam", ""),
-                fields.getOrElse("geboortedatum", ""),
-                Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
-                List(fields.getOrElse("ouder1", ""), fields.getOrElse("ouder2", "")),
-                fields.getOrElse("gemeente", ""),
-                fields.getOrElse("partij", "")
-              )
-
-              complete(HttpResponse()
-                .withEntity("Geboorte commando received")
-                .withHeaders(`Access-Control-Allow-Origin` *))
-            }
-          }
-        } ~ path("overlijden") {
-          post {
-            formFieldMap { fields =>
-              createOverlijden(
-                fields.getOrElse("bsn", ""),
-                fields.getOrElse("datum", ""),
-                fields.getOrElse("gemeente", "")
-              )
-              complete(HttpResponse()
-                .withEntity("Overlijden commando received")
-                .withHeaders(`Access-Control-Allow-Origin` *))
-            }
-          }
-
-        } ~ path("huwelijk") {
-          post {
-            formFieldMap { fields =>
-              createHuwelijk(
-                fields.getOrElse("bsn1", ""),
-                fields.getOrElse("bsn2", ""),
-                fields.getOrElse("datum", ""),
-                fields.getOrElse("gemeente", "")
-              )
-              complete(HttpResponse()
-                .withEntity("Huwelijk commando received")
-                .withHeaders(`Access-Control-Allow-Origin` *))
-            }
-          }
-
-        } ~
+      pathPrefix("persoon") { handleGeboorte ~ handleOverlijden ~ handleHuwelijk ~
           path("websocket") {
             handleWebSocketMessages(eventFlow)
           }
       }
+
+  def handleGeboorte: Route = path("geboorte") {
+    post {
+      formFieldMap { fields =>
+        createNewGeboorte(
+          fields.getOrElse("voornaam", ""),
+          fields.getOrElse("achternaam", ""),
+          fields.getOrElse("geboortedatum", ""),
+          Geslachtsaanduiding.fromString(fields.getOrElse("geslacht", "")),
+          fields.filterKeys( _ startsWith "ouder").values.toList,
+          fields.getOrElse("gemeente", ""),
+          fields.getOrElse("partij", "")
+        )
+        complete(HttpResponse()
+          .withEntity("Geboorte commando received")
+          .withHeaders(`Access-Control-Allow-Origin` *))
+      }
+    }
+  }
+
+  def handleOverlijden: Route = path("overlijden") {
+    post {
+      formFieldMap { fields =>
+        createOverlijden(
+          fields.getOrElse("bsn", ""),
+          fields.getOrElse("datum", ""),
+          fields.getOrElse("gemeente", "")
+        )
+        complete(HttpResponse()
+          .withEntity("Overlijden commando received")
+          .withHeaders(`Access-Control-Allow-Origin` *))
+      }
+    }
+  }
+
+  def handleHuwelijk: Route = path("huwelijk") {
+    post {
+      formFieldMap { fields =>
+        createHuwelijk(
+          fields.getOrElse("bsn1", ""),
+          fields.getOrElse("bsn2", ""),
+          fields.getOrElse("datum", ""),
+          fields.getOrElse("gemeente", "")
+        )
+        complete(HttpResponse()
+          .withEntity("Huwelijk commando received")
+          .withHeaders(`Access-Control-Allow-Origin` *))
+      }
+    }
+  }
 
   def createNewGeboorte(voornaam: String,
     achternaam: String,

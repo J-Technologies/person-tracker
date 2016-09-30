@@ -71,7 +71,7 @@ export default class PersonDeceased extends Component {
 
                     <hr/>
 
-                    {_.range(ouders).map(i => <InputField key={i} id="ouder" label="Ouder bsn"/>)}
+                    {_.range(ouders).map(i => <InputField key={i} id={`ouder${i}`} label="Ouder bsn"/>)}
 
                     { ouders > 0 &&
                     <button className="btn btn-danger" style={{float: 'right'}}
