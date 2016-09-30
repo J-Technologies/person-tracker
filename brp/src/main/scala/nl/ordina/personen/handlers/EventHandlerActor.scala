@@ -21,7 +21,7 @@ class EventHandlerActor extends ActorPublisher[Message] {
   override def preStart(): Unit = eventProcessor.start()
 
   @scala.throws[Exception](classOf[Exception])
-  override def postStop(): Unit = eventProcessor.shutDown()
+  override def postStop(): Unit = eventProcessor.shutdown()
 
   override def receive: Receive = {
     case _ => println

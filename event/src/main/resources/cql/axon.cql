@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS "DomainEventEntry" (
 	"payloadRevision" varchar, 
 	"payloadType" varchar, 
 	"timeStamp" timestamp,
-	"transactionIndex" bigint,
+	"globalIndex" bigint,
  	PRIMARY KEY("aggregateIdentifier", "sequenceNumber")
 );
 CREATE TABLE IF NOT EXISTS "SnapshotEventEntry" (
@@ -23,10 +23,12 @@ CREATE TABLE IF NOT EXISTS "SnapshotEventEntry" (
 	"timeStamp" timestamp,
  	PRIMARY KEY("aggregateIdentifier")
 );
-CREATE TABLE IF NOT EXISTS "TransactionEntry" (
-	"transactionIndex" bigint, 
-	"eventsReferences" set<frozen<tuple<varchar,bigint,bigint>>>,
- 	PRIMARY KEY("transactionIndex")
+CREATE TABLE IF NOT EXISTS "EventLogEntry" (
+	"batchIndex" bigint,
+	"globalIndex" bigint,
+	"aggregateIdentifier" varchar,
+	"sequenceNumber" bigint,
+ 	PRIMARY KEY("batchIndex", "globalIndex")
 );
 CREATE TABLE IF NOT EXISTS "Counters" (
 	"name" varchar, 

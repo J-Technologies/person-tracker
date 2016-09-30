@@ -6,6 +6,11 @@ libraryDependencies ++= Seq(
   "com.datastax.cassandra" % "cassandra-driver-mapping" % "3.1.0"
 )
 
+//Runtime deps
+libraryDependencies ++= Seq(
+  "ch.qos.logback" % "logback-classic" % "1.1.7"
+)
+
 //Webserver deps
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream" % "2.4.7",
