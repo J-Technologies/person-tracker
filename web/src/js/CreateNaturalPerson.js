@@ -73,6 +73,13 @@ export default class PersonDeceased extends Component {
 
                     {_.range(ouders).map(i => <InputField key={i} id="ouder" label="Ouder bsn"/>)}
 
+                    { ouders > 0 &&
+                    <button className="btn btn-danger" style={{float: 'right'}}
+                            onClick={() => this.setState({ouders: (ouders - 1)})}>
+                        Verwijder ouder
+                    </button>
+                    }
+
                     <SubmitButton />
                 </form>
             </div>
