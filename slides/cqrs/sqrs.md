@@ -99,6 +99,34 @@ Recilience/Performance
 ---
 # What is Event Sourcing?
 
+--
+
+__Event sourcing is a way of persisting your application's state by storing the history that determines the current state of your application__
+
+--
+
+![alt text](simple_event_sourcing_overview.png "Simple overview of Event Sourcing")
+
+--
+
+### Example: Tracking ships
+*Shamelessly stolen from Martin Fowler*
+
+--
+
+![alt text](boat_tracking.gif "A version of Boat tracking")
+
+--
+
+## Extra requirements:
+- History
+- Possibilty to go back in time
+- Complete rebuild to current situation
+
+--
+
+![alt text](boat_tracking_with_es.gif "A version of Boat tracking with Event Sourcing")
+
 ---
 # What does the code look like when I use Axon 3.0
 
